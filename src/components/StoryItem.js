@@ -18,7 +18,7 @@ const StoryItem = (props) => {
 
   return (
     <li onClick={openStoryHandler}>
-      Score {story.score} Comments {story.descendants} {story.title}
+      {story.score} | {story.descendants} <strong>{story.title}</strong>
     </li>
   );
 };

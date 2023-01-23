@@ -18,10 +18,12 @@ const Comment = (props) => {
   }
 
   return (
-    <li>
-      {comment.text && parser(comment.text)} by {comment.by} Date -
-      {new Date(comment.time * 1000).toDateString()}
-    </li>
+    <article>
+      {comment.text && parser(comment.text)}
+      <footer>
+        {comment.by} | {new Date(comment.time * 1000).toDateString()}
+      </footer>
+    </article>
   );
 };
 

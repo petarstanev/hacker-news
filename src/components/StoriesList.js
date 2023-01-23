@@ -15,13 +15,21 @@ const StoriesList = (props) => {
   }, []);
 
   return (
-    <ul>
-      {stories.map((story) => {
-        return (
-          <StoryItem key={story} id={story} onStoryOpen={props.onStoryOpen} />
-        );
-      })}
-    </ul>
+    <aside>
+      <nav>
+        <ul>
+          {stories.map((story) => {
+            return (
+              <StoryItem
+                key={story}
+                id={story}
+                onStoryOpen={props.onStoryOpen}
+              />
+            );
+          })}
+        </ul>
+      </nav>
+    </aside>
   );
 };
 
