@@ -18,11 +18,7 @@ const StoriesList = (props) => {
     <ul>
       {stories.map((story) => {
         return (
-          <StoryItem
-            key={story}
-            id={story}
-            onStoryOpen={props.onStoryOpen}
-          />
+          <StoryItem key={story} id={story} onStoryOpen={props.onStoryOpen} />
         );
       })}
     </ul>

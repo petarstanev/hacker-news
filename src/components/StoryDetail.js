@@ -1,9 +1,6 @@
 import Comment from "./Comment";
 
 const StoryDetail = (props) => {
-
-
-    
   return (
     <article>
       <header>{props.story.title}</header>
@@ -13,9 +10,10 @@ const StoryDetail = (props) => {
       <footer>
         Comments:
         <ul>
-          {props.story.kids.map((commentId) => (
-            <Comment key={commentId} id={commentId} />
-          ))}
+          {props.story.kids &&
+            props.story.kids.map((commentId) => (
+              <Comment key={commentId} id={commentId} />
+            ))}
         </ul>
       </footer>
     </article>

@@ -2,6 +2,8 @@ import { getItem } from "../util/api";
 import { useEffect, useState } from "react";
 
 const Comment = (props) => {
+  const parser = require("html-react-parser");
+
   const [comment, setComment] = useState();
   useEffect(() => {
     const getData = async () => {
@@ -17,7 +19,7 @@ const Comment = (props) => {
 
   return (
     <li>
-      {comment.text} by {comment.by} Date -
+      {comment.text && parser(comment.text)} by {comment.by} Date -
       {new Date(comment.time * 1000).toDateString()}
     </li>
   );
