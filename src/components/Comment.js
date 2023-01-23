@@ -1,22 +1,12 @@
-import { getItem } from "../util/api";
-import { useEffect, useState } from "react";
+import useGetItem from "../hooks/useGetItem";
 
 const Comment = (props) => {
+  const [comment, loading] = useGetItem(props.id);
   const parser = require("html-react-parser");
 
-  const [comment, setComment] = useState();
-  useEffect(() => {
-    const getData = async () => {
-      const commentDetails = await getItem(props.id);
-      setComment(commentDetails);
-    };
-    getData();
-  }, [props.id]);
-
-  if (!comment) {
+  if (loading) {
     return <p>Loading</p>;
   }
-
   return (
     <article>
       {comment.text && parser(comment.text)}

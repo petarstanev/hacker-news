@@ -1,20 +1,14 @@
-import { useEffect, useState } from "react";
-import { getItem } from "../util/api";
+import useGetItem from "../hooks/useGetItem";
 
 const StoryItem = (props) => {
-  const [story, setStory] = useState({});
-
-  useEffect(() => {
-    const getData = async () => {
-      const story = await getItem(props.id);
-      setStory(story);
-    };
-    getData();
-  }, [props.id]);
-
+  const [story, loading] = useGetItem(props.id);
   const openStoryHandler = () => {
     props.onStoryOpen(story);
   };
+
+  if (loading) {
+    return <p>Loading</p>;
+  }
 
   return (
     <li onClick={openStoryHandler}>
