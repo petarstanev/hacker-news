@@ -1,21 +1,26 @@
+import { useContext } from "react";
+import StoriesContext from "../store/stories-context";
 import Comment from "./Comment";
 
-const StoryDetail = (props) => {
+const StoryDetail = () => {
+  const context = useContext(StoriesContext);
+  if (!context.selectedStory) return;
+
   return (
     <section>
       <div className="headings">
-        <h2>{props.story.title}</h2>
+        <h2>{context.selectedStory.title}</h2>
         <h3>
-          {`${props.story.score} points by ${props.story.by} | ${new Date(
-            props.story.time * 1000
-          ).toDateString()}`}
+          {`${context.selectedStory.score} points by ${
+            context.selectedStory.by
+          } | ${new Date(context.selectedStory.time * 1000).toDateString()}`}
         </h3>
       </div>
-      <a href={props.story.url}>{props.story.url}</a>
+      <a href={context.selectedStory.url}>{context.selectedStory.url}</a>
 
       <h4>Comments:</h4>
-      {props.story.kids &&
-        props.story.kids.map((commentId) => (
+      {context.selectedStory.kids &&
+        context.selectedStory.kids.map((commentId) => (
           <Comment key={commentId} id={commentId} />
         ))}
     </section>

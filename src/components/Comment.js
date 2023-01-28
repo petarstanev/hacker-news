@@ -1,4 +1,4 @@
-import useGetItem from "../hooks/useGetItem";
+import { useGetItem } from "../hooks/useGetItem";
 
 const Comment = (props) => {
   const [comment, loading] = useGetItem(props.id);

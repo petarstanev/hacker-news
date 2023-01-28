@@ -2,7 +2,7 @@ import { useContext } from "react";
 import StoryItem from "./StoryItem";
 import StoriesContext from "../store/stories-context";
 
-const StoriesList = (props) => {
+const StoriesList = () => {
   const context = useContext(StoriesContext);
 
   return (
@@ -11,13 +11,7 @@ const StoriesList = (props) => {
         <ul>
           {context.stories &&
             context.stories.map((story) => {
-              return (
-                <StoryItem
-                  key={story}
-                  id={story}
-                  onStoryOpen={props.onStoryOpen}
-                />
-              );
+              return <StoryItem key={story} id={story} />;
             })}
         </ul>
       </nav>

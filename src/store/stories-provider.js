@@ -3,6 +3,7 @@ import StoriesContext from "./stories-context";
 import { getStories } from "../util/api";
 
 const StoriesProvider = (props) => {
+  const [selectedStory, setSelectStory] = useState();
   const [storiesState, setStoriesState] = useState([]);
   const [storiesType, setTypeOfStories] = useState("topstories");
 
@@ -19,9 +20,15 @@ const StoriesProvider = (props) => {
     setTypeOfStories(type);
   };
 
+  const setSelectStoryHandler = (story) => {
+    setSelectStory(story);
+  };
+
   const storiesContext = {
     stories: storiesState,
+    selectedStory: selectedStory,
     setStoryType: setStoryTypeHandler,
+    setSelectStory: setSelectStoryHandler,
   };
 
   return (
