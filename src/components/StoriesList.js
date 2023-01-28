@@ -1,32 +1,24 @@
-import { getTopStories } from "../util/api";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import StoryItem from "./StoryItem";
+import StoriesContext from "../store/stories-context";
 
 const StoriesList = (props) => {
-  const [stories, setStories] = useState([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const topStories = await getTopStories();
-      const top10stories = topStories.slice(0, 10);
-      setStories(top10stories);
-    };
-    getData();
-  }, []);
+  const context = useContext(StoriesContext);
 
   return (
     <aside>
       <nav>
         <ul>
-          {stories.map((story) => {
-            return (
-              <StoryItem
-                key={story}
-                id={story}
-                onStoryOpen={props.onStoryOpen}
-              />
-            );
-          })}
+          {context.stories &&
+            context.stories.map((story) => {
+              return (
+                <StoryItem
+                  key={story}
+                  id={story}
+                  onStoryOpen={props.onStoryOpen}
+                />
+              );
+            })}
         </ul>
       </nav>
     </aside>

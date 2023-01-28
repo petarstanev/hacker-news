@@ -1,4 +1,4 @@
-import useGetItem from "../hooks/useGetItem";
+import { useGetItem } from "../hooks/useGetItem";
 
 const StoryItem = (props) => {
   const [story, loading] = useGetItem(props.id);
@@ -12,7 +12,7 @@ const StoryItem = (props) => {
 
   return (
     <li onClick={openStoryHandler}>
-      {story.score} | {story.descendants} <strong>{story.title}</strong>
+      {new Date(story.time*1000).toDateString()} | {story.score} | {story.descendants} <strong>{story.title}</strong>
     </li>
   );
 };

@@ -1,6 +1,7 @@
-export const getTopStories = async () => {
+export const getStories = async (typeStories) => {
+  //topstories, newstories, beststories
   const result = await fetch(
-    "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
+    `https://hacker-news.firebaseio.com/v0/${typeStories}.json?print=pretty`
   );
 
   if (!result.ok) {

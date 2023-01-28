@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 
-export default function useGetItem(itemId) {
+export const useGetItem = (itemId) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async function () {
+    const renderData = async () => {
       try {
         setLoading(true);
+        console.log("FETCH - " + itemId);
+
         const response = await fetch(
           `https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`
         );
@@ -24,8 +26,9 @@ export default function useGetItem(itemId) {
       } finally {
         setLoading(false);
       }
-    })();
+    };
+    renderData();
   }, [itemId]);
 
   return [data, loading, error];
-}
+};
