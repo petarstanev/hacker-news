@@ -9,7 +9,6 @@ export const useGetItem = (itemId) => {
     const renderData = async () => {
       try {
         setLoading(true);
-        console.log("FETCH - " + itemId);
 
         const response = await fetch(
           `https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`

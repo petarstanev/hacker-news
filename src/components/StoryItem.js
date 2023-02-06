@@ -9,11 +9,15 @@ const StoryItem = (props) => {
   if (loading) {
     return <p>Loading</p>;
   }
+  // var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
 
   return (
     <li onClick={context.setSelectStory.bind(null, story)}>
-      {new Date(story.time * 1000).toDateString()} | {story.score} |{" "}
-      {story.descendants} <strong>{story.title}</strong>
+      {new Date(story.time * 1000).toLocaleDateString()} 
+      {/* {story.descendants}  */}
+       |{story.score}| 
+      <strong> {story.title.slice(0,50)}</strong>
     </li>
   );
 };

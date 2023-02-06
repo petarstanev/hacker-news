@@ -10,7 +10,12 @@ const StoriesProvider = (props) => {
   useEffect(() => {
     const getData = async () => {
       const topStories = await getStories(storiesType);
-      const top10stories = topStories.slice(0, 10);
+      const top10stories = topStories.slice(0, 30);
+      //   result = top10stories.reduce(function (r, a) {
+      //     r[a.date] = r[a.make] || [];
+      //     r[a.make].push(a);
+      //     return r;
+      // }, Object.create(null));
       setStoriesState(top10stories);
     };
     getData();
@@ -27,6 +32,7 @@ const StoriesProvider = (props) => {
   const storiesContext = {
     stories: storiesState,
     selectedStory: selectedStory,
+    selectedStoryType: storiesType,
     setStoryType: setStoryTypeHandler,
     setSelectStory: setSelectStoryHandler,
   };
