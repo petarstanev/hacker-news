@@ -1,7 +1,7 @@
 import React from "react";
 
 const StoriesContext = React.createContext({
-  stories: [],
+  displayStories: [],
   selectedStory: {},
   selectedStoryType: {},
   setStoryType: () => {},
