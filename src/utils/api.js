@@ -14,7 +14,16 @@ export const getStories = async (typeStories) => {
   return stories;
 };
 
+let cache = {};
+
 export const getItem = async (itemId) => {
+  if (cache[itemId] !== undefined) {
+    console.log("CACHE" + itemId);
+    return cache[itemId].value;
+  } else {
+    console.log("FETCH" + itemId);
+  }
+
   const result = await fetch(
     `https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`
   );
@@ -24,5 +33,6 @@ export const getItem = async (itemId) => {
   }
 
   const data = await result.json();
+  cache[itemId] = { value: data, time: new Date() };
   return data;
 };
