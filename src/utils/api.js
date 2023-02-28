@@ -9,7 +9,9 @@ export const getStories = async (typeStories) => {
   }
 
   const data = await result.json();
-  return data;
+
+  const stories = await Promise.all(data.slice(0, 30).map(getItem));
+  return stories;
 };
 
 export const getItem = async (itemId) => {

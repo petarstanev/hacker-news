@@ -1,33 +1,49 @@
 import { useState, useEffect } from "react";
+import { getItem } from "../utils/api";
 
 export const useGetItem = (itemId) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    const renderData = async () => {
-      try {
-        setLoading(true);
+    if (!data[itemId]) {
+      console.log("fetch " + itemId);
+      setLoading(true);
+      getItem(itemId)
+        .then((item) => {
+          setData((prevState) => ({
+            ...prevState,
+            [itemId]: item,
+          }));
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    } else {
+      console.log("exist " + itemId);
+    }
 
-        const response = await fetch(
-          `https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`
-        );
+    //     setLoading(true);
 
-        if (!response.ok) {
-          throw Error("Failed to fetch item - " + itemId);
-        }
+    //     const response = await fetch(
+    //       `https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`
+    //     );
 
-        const data = await response.json();
-        setData(data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    renderData();
+    //     if (!response.ok) {
+    //       throw Error("Failed to fetch item - " + itemId);
+    //     }
+
+    //     const data = await response.json();
+    //     setData(data);
+    //   } catch (err) {
+    //     setError(err);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // })();
   }, [itemId]);
-
-  return [data, loading, error];
+  console.log(data);
+  return [data[itemId], isLoading, error];
 };
