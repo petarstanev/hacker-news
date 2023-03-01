@@ -3,6 +3,7 @@ import { getStories } from "../utils/api";
 
 const useGetStories = (type) => {
   const [stories, setStories] = useState({});
+  const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   let storiesType = stories[type];
@@ -15,15 +16,17 @@ const useGetStories = (type) => {
             ...prevState,
             [type]: stories,
           }));
-          setIsLoading(false);
         })
-        .catch(() => {
+        .catch((err) => {
+          setError(err);
+        })
+        .finally(() => {
           setIsLoading(false);
         });
     }
   }, [type, storiesType]);
 
-  return { isLoading, stories: stories[type] };
+  return [stories[type], isLoading, error];
 };
 
 export default useGetStories;
