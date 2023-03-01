@@ -3,13 +3,13 @@ import StoriesContext from "./stories-context";
 import useGetStories from "../hooks/useGetStories";
 
 const StoriesProvider = (props) => {
-  const [storiesType, setTypeOfStories] = useState("topstories");
-  const [stories, isLoading, error] = useGetStories(storiesType);
+  const [category, setCategory] = useState("topstories");
+  const [stories, isLoading, error] = useGetStories(category);
   const [selectedStory, setSelectStory] = useState();
 
-  const setStoryTypeHandler = (type) => {
-    setSelectStory(null); //set story to null if we change the type
-    setTypeOfStories(type);
+  const setCategoryHandler = (category) => {
+    setSelectStory(null); //set story to null if we change the category
+    setCategory(category);
   };
 
   const setSelectStoryHandler = (story) => {
@@ -19,8 +19,8 @@ const StoriesProvider = (props) => {
   const storiesContext = {
     displayStories: stories,
     selectedStory: selectedStory,
-    selectedStoryType: storiesType,
-    setStoryType: setStoryTypeHandler,
+    category: category,
+    setCategory: setCategoryHandler,
     setSelectStory: setSelectStoryHandler,
   };
 

@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { getStories } from "../utils/api";
 
-const useGetStories = (type) => {
+const useGetStories = (category) => {
   const [stories, setStories] = useState({});
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  let storiesType = stories[type];
+  let storiesCategory = stories[category];
   useEffect(() => {
-    if (!storiesType) {
+    if (!storiesCategory) {
       setIsLoading(true);
-      getStories(type)
+      getStories(category)
         .then((stories) => {
           setStories((prevState) => ({
             ...prevState,
-            [type]: stories,
+            [category]: stories,
           }));
         })
         .catch((err) => {
@@ -24,9 +24,9 @@ const useGetStories = (type) => {
           setIsLoading(false);
         });
     }
-  }, [type, storiesType]);
+  }, [category, storiesCategory]);
 
-  return [stories[type], isLoading, error];
+  return [stories[category], isLoading, error];
 };
 
 export default useGetStories;

@@ -4,10 +4,10 @@ const StoriesSelector = () => {
   return (
     <nav>
       <ul>
-        <StoriesSelectorLink type="beststories">Hot</StoriesSelectorLink>
-        <StoriesSelectorLink type="newstories">New</StoriesSelectorLink>
-        <StoriesSelectorLink type="topstories">Top</StoriesSelectorLink>
-        <StoriesSelectorLink type="top10stories">Top 10</StoriesSelectorLink>
+        <StoriesSelectorLink category="beststories">Hot</StoriesSelectorLink>
+        <StoriesSelectorLink category="newstories">New</StoriesSelectorLink>
+        <StoriesSelectorLink category="topstories">Top</StoriesSelectorLink>
+        <StoriesSelectorLink category="top10stories">Top 10</StoriesSelectorLink>
       </ul>
     </nav>
   );

@@ -5,10 +5,10 @@ const StoriesSelectorLink = (props) => {
   const context = useContext(StoriesContext);
 
   const selectorHandler = () => {
-    context.setStoryType(props.type);
+    context.setCategory(props.category);
   };
 
-  if (context.selectedStoryType === props.type) {
+  if (context.category === props.category) {
     return (
       <li onClick={selectorHandler}>
         <b>{props.children}</b>

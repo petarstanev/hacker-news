@@ -1,7 +1,7 @@
-export const getStories = async (typeStories) => {
+export const getStories = async (category) => {
   //topstories, newstories, beststories
   const result = await fetch(
-    `https://hacker-news.firebaseio.com/v0/${typeStories}.json?print=pretty`
+    `https://hacker-news.firebaseio.com/v0/${category}.json?print=pretty`
   );
 
   if (!result.ok) {
@@ -18,10 +18,10 @@ let cache = {};
 
 export const getItem = async (itemId) => {
   if (cache[itemId] !== undefined) {
-    console.log("CACHE" + itemId);
+    // console.log("CACHE" + itemId);
     return cache[itemId].value;
   } else {
-    console.log("FETCH" + itemId);
+    // console.log("FETCH" + itemId);
   }
 
   const result = await fetch(
