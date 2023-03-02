@@ -5,6 +5,7 @@ const StoriesContext = React.createContext({
   selectedStory: {},
   setSelectStory: () => {},
   category: {},
+  isCategoryLoading: false,
   setCategory: () => {},
 });
 

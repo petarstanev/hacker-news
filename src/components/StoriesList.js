@@ -6,16 +6,13 @@ const StoriesList = () => {
   const context = useContext(StoriesContext);
 
   return (
-    <aside>
-      <nav>
-        <ul>
-          {context.displayStories &&
-            context.displayStories.map((story) => {
-              return <StoryItem key={story.id} {...story} />;
-            })}
-        </ul>
-      </nav>
-    </aside>
+    <div>
+      {context.isCategoryLoading && <p>Loading ...</p>}
+      {context.displayStories &&
+        context.displayStories.map((story) => (
+          <StoryItem key={story.id} {...story} />
+        ))}
+    </div>
   );
 };
 

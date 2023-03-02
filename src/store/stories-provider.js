@@ -20,6 +20,7 @@ const StoriesProvider = (props) => {
     displayStories: stories,
     selectedStory: selectedStory,
     category: category,
+    isCategoryLoading: isLoading,
     setCategory: setCategoryHandler,
     setSelectStory: setSelectStoryHandler,
   };

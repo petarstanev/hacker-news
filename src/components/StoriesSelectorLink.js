@@ -7,16 +7,16 @@ const StoriesSelectorLink = (props) => {
   const selectorHandler = () => {
     context.setCategory(props.category);
   };
-
-  if (context.category === props.category) {
-    return (
-      <li onClick={selectorHandler}>
-        <b>{props.children}</b>
-      </li>
-    );
-  } else {
-    return <li onClick={selectorHandler}>{props.children}</li>;
-  }
+  return (
+    <li
+      style={
+        context.category === props.category ? { fontWeight: "bold" } : undefined
+      }
+      onClick={selectorHandler}
+    >
+      {props.children}
+    </li>
+  );
 };
 
 export default StoriesSelectorLink;
