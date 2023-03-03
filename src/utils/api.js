@@ -10,7 +10,7 @@ export const getStories = async (category) => {
 
   const data = await result.json();
 
-  const stories = await Promise.all(data.slice(0, 10).map(getItem));
+  const stories = await Promise.all(data.slice(0, 100).map(getItem));
   return stories;
 };
 

@@ -7,6 +7,7 @@ const StoriesSelectorLink = (props) => {
   const selectorHandler = () => {
     context.setCategory(props.category);
   };
+
   return (
     <li
       style={
@@ -15,6 +16,14 @@ const StoriesSelectorLink = (props) => {
       onClick={selectorHandler}
     >
       {props.children}
+
+      {props.category === "best" && (
+        <select>
+          <option value="today">Today</option>
+          <option value="week">This week</option>
+          <option value="month">This month</option>
+        </select>
+      )}
     </li>
   );
 };

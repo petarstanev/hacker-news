@@ -6,6 +6,10 @@ const useGetStories = (category) => {
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
+  if (category === "best") {
+    category = 'newstories';
+  } 
+
   let storiesCategory = stories[category];
   useEffect(() => {
     if (!storiesCategory) {
@@ -25,6 +29,13 @@ const useGetStories = (category) => {
         });
     }
   }, [category, storiesCategory]);
+  console.log(stories);
+
+  const previous = new Date();
+  previous.setDate(new Date().getDate() - 1);
+
+  // let today = stories[category].filter(s => s.time > previous);
+  // console.log(today);
 
   return [stories[category], isLoading, error];
 };
