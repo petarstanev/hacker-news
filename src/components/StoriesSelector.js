@@ -15,7 +15,6 @@ const StoriesSelector = () => {
         <StoriesSelectorLink category="beststories">Hot</StoriesSelectorLink>
         <StoriesSelectorLink category="newstories">New</StoriesSelectorLink>
         <StoriesSelectorLink category="topstories">Top</StoriesSelectorLink>
-        <StoriesSelectorLink category="best">Best</StoriesSelectorLink>
       </ul>
     </nav>
   );

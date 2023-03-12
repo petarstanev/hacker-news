@@ -1,4 +1,5 @@
-export let kFormatter = (num) => { // TODO try to remove
+export let kFormatter = (num) => {
+  // TODO try to remove
   return num > 999 ? (num / 1000).toFixed(1) + "k" : num;
 };
 
@@ -30,8 +31,8 @@ export let timeSince = (date) => {
   return Math.floor(seconds) + " seconds";
 };
 
-export let  urlFormatter = (url) => {
-  return url.replace(/^https?:\/\/(www.)?/, "");
+export let urlFormatter = (url) => {
+  // return url.replace(/^https?:\/\/(www.)?/, "");
+  let domain = new URL(url);
+  return domain.hostname;
 };
-
- 

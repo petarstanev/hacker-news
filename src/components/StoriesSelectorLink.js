@@ -11,19 +11,13 @@ const StoriesSelectorLink = (props) => {
   return (
     <li
       style={
-        context.category === props.category ? { fontWeight: "bold" } : undefined
+        context.category === props.category
+          ? { fontWeight: "bold", cursor: "pointer" }
+          : { cursor: "pointer" }
       }
       onClick={selectorHandler}
     >
       {props.children}
-
-      {props.category === "best" && (
-        <select>
-          <option value="today">Today</option>
-          <option value="week">This week</option>
-          <option value="month">This month</option>
-        </select>
-      )}
     </li>
   );
 };

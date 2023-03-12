@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { timeSince, urlFormatter, kFormatter } from "../utils/dataFormatter";
 import StoriesContext from "../store/stories-context";
+import { FaRegComment } from "react-icons/fa";
 
 const StoryItem = (props) => {
   const context = useContext(StoriesContext);
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", borderBottom: "1px solid black" }}>
       <div
         onClick={() => {
           window.open(props.url, "_blank", "noopener,noreferrer");
@@ -28,9 +29,18 @@ const StoryItem = (props) => {
       </div>
       <div
         onClick={context.setSelectStory.bind(null, props)}
-        style={{ display: "flex", flex: "0 0 3em", justifyContent: "center" }}
+        style={{
+          display: "flex",
+          flex: "0 0 4em",
+          flexDirection: "column",
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          borderLeft: "1px solid black",
+        }}
       >
-        C{props.kids && kFormatter(props.kids.length)}
+        <FaRegComment size="1.5em" />
+        {props.kids && <p>{kFormatter(props.kids.length)}</p>}
       </div>
     </div>
   );

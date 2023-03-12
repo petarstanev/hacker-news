@@ -7,9 +7,19 @@ const StoryDetail = () => {
   const context = useContext(StoriesContext);
   if (!context.selectedStory) return;
 
+  let backButtonHandler = () => {
+    context.setSelectStory(null);
+  };
+
   return (
     <div style={{ padding: "0 1em" }}>
-      <div style={{ border: "1px solid black" }}>
+      <button
+        onClick={backButtonHandler}
+        style={{ backgroundColor: "white", border: "1px solid black" }}
+      >
+        {"<"} Back
+      </button>
+      <div>
         <h2>{context.selectedStory.title}</h2>
         <p>
           {context.selectedStory.url && (
@@ -29,7 +39,7 @@ const StoryDetail = () => {
       <h4>Comments:</h4>
       {context.selectedStory.kids &&
         context.selectedStory.kids.map((commentId) => (
-          <Comment key={commentId} id={commentId} />
+          <Comment key={commentId} id={commentId} level={0} />
         ))}
     </div>
   );

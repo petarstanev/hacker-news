@@ -4,7 +4,7 @@ import useGetStories from "../hooks/useGetStories";
 
 const StoriesProvider = (props) => {
   const [category, setCategory] = useState("topstories");
-  const [stories, isLoading, error] = useGetStories(category);
+  const [stories, isLoading] = useGetStories(category);
   const [selectedStory, setSelectStory] = useState();
 
   const setCategoryHandler = (category) => {
