@@ -8,23 +8,18 @@ const StoryItem = (props: {
   title: string;
   score: string;
   by: string;
-  time: string;
+  time: number;
   kids: string[];
 }) => {
   const context = useContext(StoriesContext);
 
   return (
-    <div style={{ display: "flex", borderBottom: "1px solid black" }}>
+    <div className="flex border-b-black">
       <div
         onClick={() => {
           window.open(props.url, "_blank", "noopener,noreferrer");
         }}
-        style={{
-          flex: "1",
-          flexWrap: "wrap",
-          wordBreak: "break-all",
-          paddingLeft: "1em",
-        }}
+        className="flex-1 flex-wrap break-words pl-4 border-b-black border "
       >
         <p>
           <strong> {props.title}</strong>
@@ -36,15 +31,7 @@ const StoryItem = (props: {
       </div>
       <div
         onClick={context.setSelectStory.bind(null, props)}
-        style={{
-          display: "flex",
-          flex: "0 0 4em",
-          flexDirection: "column",
-          alignItems: "center",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          borderLeft: "1px solid black",
-        }}
+        className="flex w-32 flex-col flex-wrap justify-center items-center border border-l-black border-b-black"
       >
         <FaRegComment size="1.5em" />
         {props.kids && <p>{kFormatter(props.kids.length)}</p>}

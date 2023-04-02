@@ -8,7 +8,7 @@ const StoriesList = () => {
   return (
     <div>
       {context.isCategoryLoading && (
-        <p style={{ paddingLeft: "1em" }}>Loading ...</p>
+        <p className='pl-4'>Loading ...</p>
       )}
       {context.displayStories &&
         context.displayStories.map((story) => (

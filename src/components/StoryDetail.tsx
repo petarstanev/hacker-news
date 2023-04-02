@@ -5,23 +5,23 @@ import { timeSince, urlFormatter } from "../utils/dataFormatter";
 
 const StoryDetail = () => {
   const context = useContext(StoriesContext);
-  
-  if (!context.selectedStory) return;
-  
+
   let backButtonHandler = () => {
     context.setSelectStory(null);
   };
 
+  if (!context.selectedStory) return <p>Story not found</p>;
+
   return (
-    <div style={{ padding: "0 1em" }}>
+    <div className="px-4">
       <button
         onClick={backButtonHandler}
-        style={{ backgroundColor: "white", border: "1px solid black" }}
+        className="bg-white border border-black"
       >
-        {"<"} Back
+        Back
       </button>
       <div>
-        <h2>{context.selectedStory.title}</h2>
+        <h2 className="text-xl font-bold">{context.selectedStory.title}</h2>
         <p>
           {context.selectedStory.url && (
             <a href={context.selectedStory.url}>
@@ -30,14 +30,14 @@ const StoryDetail = () => {
           )}
         </p>
 
-        <h3>
+        <h3 className="text-lg font-bold">
           {`${context.selectedStory.score} points by ${
             context.selectedStory.by
           } ${timeSince(context.selectedStory.time)} ago`}
         </h3>
       </div>
 
-      <h4>Comments:</h4>
+      <h4 className="font-bold">Comments:</h4>
       {context.selectedStory.kids &&
         context.selectedStory.kids.map((commentId) => (
           <Comment key={commentId} id={commentId} level={0} />

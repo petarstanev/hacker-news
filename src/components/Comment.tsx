@@ -5,7 +5,7 @@ interface CommentProp {
   id: string;
   kids: string[];
   by: string;
-  time: string;
+  time: number;
   text: string;
 }
 
@@ -33,24 +33,28 @@ const Comment = (props: { id: string; level: number }) => {
   }
 
   return (
-    <div style={{ paddingLeft: props.level + "em" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className={"p-4 border border-black"}>
+      <div className="flex justify-between">
         <p>{comment.by}</p>
         <p>{timeSince(comment.time)} ago</p>
       </div>
-      <div>{comment.text && parser(comment.text)}</div>
+      <div className="overflow-auto">{comment.text && parser(comment.text)}</div>
       {comment.kids && (
-        <button onClick={repliesButtonClickHandler}>
+        <button
+          onClick={repliesButtonClickHandler}
+          className="border border-black"
+        >
           {`${showSubComments ? "Hide " : "Show "} ${
             comment.kids.length
           } replies`}
         </button>
       )}
-
-      {showSubComments &&
-        subComments.map((subComment) => (
-          <Comment key={subComment} id={subComment} level={props.level + 1} />
-        ))}
+      <div className="ml-4">
+        {showSubComments &&
+          subComments.map((subComment) => (
+            <Comment key={subComment} id={subComment} level={props.level + 1} />
+          ))}
+      </div>
     </div>
   );
 };
