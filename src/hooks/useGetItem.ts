@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { getItem } from "../utils/api";
 
-export const useGetItem = (itemId) => {
-  const [data, setData] = useState({});
+export const useGetItem = <T>(
+  itemId: string
+): [T | undefined, boolean, any] => {
+  const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState();
   const [isLoading, setLoading] = useState(true);
 

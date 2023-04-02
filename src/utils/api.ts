@@ -1,4 +1,4 @@
-export const getStories = async (category) => {
+export const getStories = async (category: string) => {
   //topstories, newstories, beststories
   const result = await fetch(
     `https://hacker-news.firebaseio.com/v0/${category}.json?print=pretty`
@@ -14,12 +14,12 @@ export const getStories = async (category) => {
   return stories;
 };
 
-let cache = {};
+let cache = new Map();
 
-export const getItem = async (itemId) => {
-  if (cache[itemId] !== undefined) {
+export const getItem = async (itemId: string) => {
+  if (cache.has(itemId)) {
     // console.log("CACHE" + itemId);
-    return cache[itemId].value;
+    return cache.get(itemId).value;
   } else {
     // console.log("FETCH" + itemId);
   }
@@ -33,6 +33,6 @@ export const getItem = async (itemId) => {
   }
 
   const data = await result.json();
-  cache[itemId] = { value: data, time: new Date() };
+  cache.set(itemId, { value: data, time: new Date() });
   return data;
 };

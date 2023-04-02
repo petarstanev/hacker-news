@@ -1,17 +1,24 @@
 import { useState } from "react";
 import { useGetItem } from "../hooks/useGetItem";
 import { timeSince } from "../utils/dataFormatter";
+interface CommentProp {
+  id: string;
+  kids: string[];
+  by: string;
+  time: string;
+  text: string;
+}
 
-const Comment = (props) => {
-  const [comment, loading] = useGetItem(props.id);
+const Comment = (props: { id: string; level: number }) => {
+  const [comment, loading] = useGetItem<CommentProp>(props.id);
   const parser = require("html-react-parser");
-  const [subComments, setSubComments] = useState([]);
+  const [subComments, setSubComments] = useState<string[]>([]);
   const [showSubComments, setShowSubComments] = useState(false);
 
   const repliesButtonClickHandler = () => {
     if (showSubComments) {
       setShowSubComments(false);
-    } else {
+    } else if (comment) {
       setShowSubComments(true);
       setSubComments(comment.kids);
     }
@@ -20,6 +27,11 @@ const Comment = (props) => {
   if (loading) {
     return <p>Loading</p>;
   }
+
+  if (!comment) {
+    return <p>Error...</p>;
+  }
+
   return (
     <div style={{ paddingLeft: props.level + "em" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>

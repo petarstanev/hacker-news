@@ -3,7 +3,14 @@ import { timeSince, urlFormatter, kFormatter } from "../utils/dataFormatter";
 import StoriesContext from "../store/stories-context";
 import { FaRegComment } from "react-icons/fa";
 
-const StoryItem = (props) => {
+const StoryItem = (props: {
+  url: string;
+  title: string;
+  score: string;
+  by: string;
+  time: string;
+  kids: string[];
+}) => {
   const context = useContext(StoriesContext);
 
   return (

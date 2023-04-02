@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import StoriesContext from "../store/stories-context";
 
-const StoriesSelectorLink = (props) => {
+const StoriesSelectorLink = (props: {category: string, children: React.ReactNode}) => {
   const context = useContext(StoriesContext);
 
   const selectorHandler = () => {

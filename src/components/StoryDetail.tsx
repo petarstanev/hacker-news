@@ -5,8 +5,9 @@ import { timeSince, urlFormatter } from "../utils/dataFormatter";
 
 const StoryDetail = () => {
   const context = useContext(StoriesContext);
+  
   if (!context.selectedStory) return;
-
+  
   let backButtonHandler = () => {
     context.setSelectStory(null);
   };

@@ -1,10 +1,10 @@
-export let kFormatter = (num) => {
+export let kFormatter = (num: number) => {
   // TODO try to remove
   return num > 999 ? (num / 1000).toFixed(1) + "k" : num;
 };
 
-export let timeSince = (date) => {
-  let nowUnixDate = Math.floor(new Date() / 1000);
+export let timeSince = (date: number) => {
+  let nowUnixDate = Math.floor(new Date().getTime() / 1000);
   let seconds = nowUnixDate - date;
 
   var interval = seconds / 31536000;
@@ -31,7 +31,7 @@ export let timeSince = (date) => {
   return Math.floor(seconds) + " seconds";
 };
 
-export let urlFormatter = (url) => {
+export let urlFormatter = (url: string) => {
   // return url.replace(/^https?:\/\/(www.)?/, "");
   let domain = new URL(url);
   return domain.hostname;

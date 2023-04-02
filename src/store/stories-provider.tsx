@@ -1,18 +1,19 @@
 import { useState } from "react";
-import StoriesContext from "./stories-context";
+import StoriesContext, {SelectedStory} from "./stories-context";
 import useGetStories from "../hooks/useGetStories";
 
-const StoriesProvider = (props) => {
+
+const StoriesProvider = (props: { children: React.ReactNode }) => {
   const [category, setCategory] = useState("topstories");
   const [stories, isLoading] = useGetStories(category);
-  const [selectedStory, setSelectStory] = useState();
+  const [selectedStory, setSelectStory] = useState<SelectedStory | null>();
 
-  const setCategoryHandler = (category) => {
+  const setCategoryHandler = (category: string) => {
     setSelectStory(null); //set story to null if we change the category
     setCategory(category);
   };
 
-  const setSelectStoryHandler = (story) => {
+  const setSelectStoryHandler = (story: SelectedStory | null) => {
     setSelectStory(story);
   };
 

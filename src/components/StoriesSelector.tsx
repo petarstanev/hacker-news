@@ -2,15 +2,9 @@ import StoriesSelectorLink from "./StoriesSelectorLink";
 
 const StoriesSelector = () => {
   return (
-    <nav style={{ display: "flex" }}>
+    <nav className="flex">
       <ul
-        style={{
-          display: "flex",
-          listStyleType: "none",
-          flex: "1",
-          justifyContent: "space-around",
-          padding: "0",
-        }}
+        className="flex grow justify-around"
       >
         <StoriesSelectorLink category="beststories">Hot</StoriesSelectorLink>
         <StoriesSelectorLink category="newstories">New</StoriesSelectorLink>

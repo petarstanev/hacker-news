@@ -11,7 +11,7 @@ const Stories = () => {
   return (
     <React.Fragment>
       <StoriesSelector />
-      {context.selectedStory ? <StoryDetail /> : <StoriesList />}
+      {context && context.selectedStory ? <StoryDetail /> : <StoriesList />}
     </React.Fragment>
   );
 };
