@@ -1,3 +1,18 @@
+export const getStoriesIds = async (category: string) => {
+  //topstories, newstories, beststories
+  const result = await fetch(
+    `https://hacker-news.firebaseio.com/v0/${category}.json?print=pretty`
+  );
+
+  if (!result.ok) {
+    throw Error("Failed to fetch top stories");
+  }
+
+  const data = await result.json();
+  return data.slice(0, 50);
+};
+
+
 export const getStories = async (category: string) => {
   //topstories, newstories, beststories
   const result = await fetch(

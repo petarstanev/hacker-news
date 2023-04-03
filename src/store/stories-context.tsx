@@ -1,21 +1,12 @@
 import React from "react";
-
-export interface SelectedStory {
-  id: number;
-  url: string;
-  title: string;
-  score: string;
-  by: string;
-  time: number;
-  kids: string[];
-}
+import { FullStory } from "./stories-provider";
 
 interface StoriesContextProps {
-  displayStories: SelectedStory[];
-  selectedStory: SelectedStory | null | undefined;
+  displayStories: FullStory[];
+  selectedStory: FullStory | undefined;
   category: string;
-  isCategoryLoading: string | boolean | undefined;
-  setSelectStory: (story: SelectedStory | null) => void;
+  isCategoryLoading: boolean;
+  setSelectStory: (story: FullStory | undefined) => void;
   setCategory: (category: string) => void;
 }
 
