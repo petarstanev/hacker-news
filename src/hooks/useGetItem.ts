@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getItem } from "../utils/api";
 
 export const useGetItem = <T>(
-  itemId: string
+  itemId: number
 ): [T | undefined, boolean, any] => {
   const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState();
@@ -10,7 +10,7 @@ export const useGetItem = <T>(
 
   useEffect(() => {
     setLoading(true);
-    getItem(itemId)
+    getItem(itemId+'')//TODO: Remove conversion
       .then((item) => {
         setData(item);
       })

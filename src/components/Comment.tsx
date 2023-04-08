@@ -2,17 +2,17 @@ import { useState } from "react";
 import { useGetItem } from "../hooks/useGetItem";
 import { timeSince } from "../utils/dataFormatter";
 interface CommentProp {
-  id: string;
-  kids: string[];
+  id: number;
+  kids: number[];
   by: string;
   time: number;
   text: string;
 }
 
-const Comment = (props: { id: string; level: number }) => {
+const Comment = (props: { id: number; level: number }) => {
   const [comment, loading] = useGetItem<CommentProp>(props.id);
   const parser = require("html-react-parser");
-  const [subComments, setSubComments] = useState<string[]>([]);
+  const [subComments, setSubComments] = useState<number[]>([]);
   const [showSubComments, setShowSubComments] = useState(false);
 
   const repliesButtonClickHandler = () => {
@@ -38,7 +38,9 @@ const Comment = (props: { id: string; level: number }) => {
         <p>{comment.by}</p>
         <p>{timeSince(comment.time)} ago</p>
       </div>
-      <div className="overflow-auto">{comment.text && parser(comment.text)}</div>
+      <div className="overflow-auto">
+        {comment.text && parser(comment.text)}
+      </div>
       {comment.kids && (
         <button
           onClick={repliesButtonClickHandler}

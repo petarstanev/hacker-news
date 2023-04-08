@@ -9,7 +9,7 @@ export const getStoriesIds = async (category: string) => {
   }
 
   const data = await result.json();
-  return data.slice(0, 50);
+  return data.slice(0, 10);
 };
 
 
