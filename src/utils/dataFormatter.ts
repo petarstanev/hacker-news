@@ -1,6 +1,6 @@
-export let kFormatter = (num: number) => {
+export let kFormatter = (num: number): string => {
   // TODO try to remove
-  return num > 999 ? (num / 1000).toFixed(1) + "k" : num;
+  return num > 999 ? (num / 1000).toFixed(1) + "k" : num+'';
 };
 
 export let timeSince = (date: number) => {

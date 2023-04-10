@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import Navigation from "./Navigation";
+// import Header from "./Header";
 import { ScrollProvider } from "@/store/scrollContext";
 import Head from "next/head";
 
@@ -12,8 +13,11 @@ const Layout = ({ children }: PropsWithChildren) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/* <Header/> */}
       <Navigation />
-      <ScrollProvider>{children}</ScrollProvider>
+      <main className="max-w-3xl mx-auto">
+        <ScrollProvider>{children}</ScrollProvider>
+      </main>
     </>
   );
 };

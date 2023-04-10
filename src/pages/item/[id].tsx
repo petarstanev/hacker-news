@@ -1,18 +1,23 @@
 import { getItem } from "@/utils/api";
-import { FullStory } from "@/store/stories-provider";
+import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
 import { timeSince, urlFormatter } from "../../utils/dataFormatter";
 import Comment from "@/components/Comment";
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
-export default function Item(props: FullStory ) {
-  const router = useRouter();
-  let [text, setText] = useState<string | JSX.Element | JSX.Element[]>();
+// import { useRouter } from "next/router";
+
+export default function Item(props: FullStoryFormatted) {
+  // const router = useRouter();
+  let [formattedText, setFormattedText] = useState<
+    string | JSX.Element | JSX.Element[]
+  >();
   let [timeAgo, setTimeAgo] = useState<string>();
 
+  //TODO: Move this in server rendering or somewhere else
   useEffect(() => {
-    props.text && setText(parse(props.text));
+    props.text && setFormattedText(parse(props.text));
   }, []);
 
   useEffect(() => {
@@ -21,36 +26,45 @@ export default function Item(props: FullStory ) {
 
   return (
     <div className="px-4">
-      <button
+      {/* TODO: Test on phone if we need back button or not */}
+      {/* <button
         onClick={() => router.back()}
         className="bg-white border border-black"
       >
         Back
-      </button>
-      <div>
-        <h2 className="text-xl font-bold">{props.title}</h2>
-        {props.text && <section>{text}</section>}
+      </button> */}
+      <h2 className="text-xl font-bold">{props.title}</h2>
+      {props.text && <section className="py-2">{formattedText}</section>}
 
-        {props.url && (
-          <a href={props.url}>{urlFormatter(props.url)}</a>
-        )}
+      {props.url && (
+        <Link
+          className="py-2 text-sky-600 line-clamp-2 hover:underline"
+          href={props.url}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {props.url}
+        </Link>
+      )}
 
-        <h3 className="text-lg font-bold">
-          {`${props.score} points by ${props.by} ${timeAgo} ago`}
-        </h3>
-      </div>
+      <h3>{`${props.score} points by ${props.by} ${timeAgo} ago`}</h3>
 
-      <h4 className="font-bold">Comments:</h4>
-      {props.kids &&
-        props.kids.map((commentId) => (
-          <Comment key={commentId} id={commentId} level={0} />
-        ))}
+      {props.kids ? (
+        <div>
+          <h4 className="font-bold pt-2">Comments:</h4>
+          {props.kids.map((commentId) => (
+            <Comment key={commentId} id={commentId} level={0} />
+          ))}
+        </div>
+      ) : (
+        <h4 className="py-2">No comments yet</h4>
+      )}
     </div>
   );
 }
 export async function getServerSideProps(context: { params: { id: string } }) {
   let fullStory = await getItem(context.params.id);
   return {
-    props: {...fullStory}, // will be passed to the page component as props
+    props: { ...fullStory }, // will be passed to the page component as props
   };
 }

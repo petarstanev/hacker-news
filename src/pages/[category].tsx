@@ -10,7 +10,6 @@ export default function Category(props: { stories: FullStory[] }) {
   const handleScroll = () => {
     const position = window.pageYOffset;
     if (position) {
-      console.log("POSITION ", position);
       context.setScrollPosition(position);
     }
   };
@@ -20,14 +19,14 @@ export default function Category(props: { stories: FullStory[] }) {
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      console.log("LAST", window.scrollY);
+      // console.log("LAST", window.scrollY);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
     <>
-      {props.stories.map((story) => (
+      {props.stories && props.stories.map((story) => (
         <StoryItem key={story.id} {...story} />
       ))}
     </>
@@ -35,11 +34,15 @@ export default function Category(props: { stories: FullStory[] }) {
 }
 
 export async function getStaticPaths() {
+  // TODO: Remove stories from the url
   return {
     paths: [
-      { params: { category: "topstories" } },
-      { params: { category: "newstories" } },
-      { params: { category: "beststories" } },
+      { params: { category: "top" } },
+      { params: { category: "new" } },
+      { params: { category: "best" } },
+      { params: { category: "ask" } },
+      { params: { category: "show" } },
+      { params: { category: "jobs" } },
     ],
     fallback: true, // can also be true or 'blocking'
   };
@@ -55,9 +58,6 @@ export async function getStaticProps(context: {
   });
 
   let stories = await Promise.all(storiesPromises);
-  // console.log(
-  //   "FINISH Loading" + new Date().getMinutes() + ":" + new Date().getSeconds()
-  // );
   return {
     // Passed to the page component as props
     props: { stories },

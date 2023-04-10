@@ -2,16 +2,28 @@ import { useState, useEffect } from "react";
 import StoriesContext from "./stories-context";
 import { getItem, getStoriesIds } from "@/utils/api";
 
+// TODO : Move interfaces in new place
 export interface FullStory {
-  by: string;
-  descendants: number;
   id: number;
-  kids: number[];
-  score: number;
-  time: number;
-  title: string;
-  type: string;
+  deleted?: boolean;
+  type: "job" | "story" | "comment" | "poll" | "pollopt";
+  by: string; //username
+  time: number; // Unix time
+  text?: string; //HTML
+  dead?: boolean;
+  parent?: number; //comment parent or the relevant story
+  poll?: number; // just for poll part(answer)
+  kids: number[]; //item comments
   url: string;
+  score: number;
+  title: string;
+  parts?: string[]; //just for poll list of answers
+  descendants: number[]; //total number of comments
+}
+
+export interface FullStoryFormatted extends FullStory {
+  formattedLink?: string;
+  formattedText?: string | JSX.Element | JSX.Element[]; //parsed HTML
 }
 
 let storiesMap = new Map();
