@@ -10,18 +10,20 @@ interface CommentProp {
 }
 
 const Comment = (props: { id: number; level: number }) => {
-  const [comment, loading] = useGetItem<CommentProp>(props.id);
   const parser = require("html-react-parser");
+  const [comment, loading] = useGetItem<CommentProp>(props.id);
   const [subComments, setSubComments] = useState<number[]>([]);
   const [showSubComments, setShowSubComments] = useState(false);
+  const [expand, setExpand] = useState(true);
 
   const repliesButtonClickHandler = () => {
-    if (showSubComments) {
-      setShowSubComments(false);
-    } else if (comment) {
-      setShowSubComments(true);
-      setSubComments(comment.kids);
-    }
+    setShowSubComments((show) => {
+      show = !show;
+      if (show && comment) {
+        setSubComments(comment.kids);
+      }
+      return show;
+    });
   };
 
   if (loading) {
@@ -32,25 +34,47 @@ const Comment = (props: { id: number; level: number }) => {
     return <p>Error...</p>;
   }
 
+  const commentCollapseHandler = () => {
+    setExpand((current) => !current);
+  };
+
+  if (!expand) {
+    return (
+      <div
+        className={"border-t py-2 flex flex-col"}
+        onClick={commentCollapseHandler}
+      >
+        <div className="px-4">
+          <div className="flex justify-between">
+            <b>{comment.by}</b>
+            <p>{timeSince(comment.time)} ago</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={"p-4 border border-black"}>
-      <div className="flex justify-between">
-        <p>{comment.by}</p>
-        <p>{timeSince(comment.time)} ago</p>
+    <div className={"border-t pt-2 flex flex-col"}>
+      <div className="px-4" onClick={commentCollapseHandler}>
+        <div className="flex justify-between">
+          <b>{comment.by}</b>
+          <p>{timeSince(comment.time)} ago</p>
+        </div>
+        <div className="pb-2 overflow-auto">
+          {comment.text && parser(comment.text)}
+        </div>
       </div>
-      <div className="overflow-auto">
-        {comment.text && parser(comment.text)}
-      </div>
-      {comment.kids && (
+
+      {!showSubComments && comment.kids && (
         <button
           onClick={repliesButtonClickHandler}
-          className="border border-black"
+          className="pl-4 py-1 flex self-stretch border-t text-sky-600 hover:underline"
         >
-          {`${showSubComments ? "Hide " : "Show "} ${
-            comment.kids.length
-          } replies`}
+          {`${comment.kids.length} more replies`}
         </button>
       )}
+
       <div className="ml-4">
         {showSubComments &&
           subComments.map((subComment) => (

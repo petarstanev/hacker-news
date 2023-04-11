@@ -24,42 +24,49 @@ export default function Item(props: FullStoryFormatted) {
     setTimeAgo(timeSince(props.time));
   }, []);
 
-  return (
-    <div className="px-4">
-      {/* TODO: Test on phone if we need back button or not */}
-      {/* <button
+  {
+    /* TODO: Test on phone if we need back button or not */
+  }
+  {
+    /* <button
         onClick={() => router.back()}
         className="bg-white border border-black"
       >
         Back
-      </button> */}
-      <h2 className="text-xl font-bold">{props.title}</h2>
-      {props.text && <section className="py-2">{formattedText}</section>}
+      </button> */
+  }
+  return (
+    <article>
+      <div className="px-4">
+        <h2 className="text-xl font-bold">{props.title}</h2>
+        {props.text && <section className="py-2">{formattedText}</section>}
 
-      {props.url && (
-        <Link
-          className="py-2 text-sky-600 line-clamp-2 hover:underline"
-          href={props.url}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {props.url}
-        </Link>
-      )}
+        {props.url && (
+          <Link
+            className="py-2 line-clamp-2 text-sky-600 hover:underline"
+            href={props.url}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {props.url}
+          </Link>
+        )}
 
-      <h3>{`${props.score} points by ${props.by} ${timeAgo} ago`}</h3>
-
-      {props.kids ? (
-        <div>
-          <h4 className="font-bold pt-2">Comments:</h4>
-          {props.kids.map((commentId) => (
-            <Comment key={commentId} id={commentId} level={0} />
-          ))}
-        </div>
-      ) : (
-        <h4 className="py-2">No comments yet</h4>
-      )}
-    </div>
+        <h3>{`${props.score} points by ${props.by} ${timeAgo} ago`}</h3>
+      </div>
+      <aside>
+        {props.kids ? (
+          <>
+            <h4 className="font-bold pt-2 px-4">Comments:</h4>
+            {props.kids.map((commentId) => (
+              <Comment key={commentId} id={commentId} level={0} />
+            ))}
+          </>
+        ) : (
+          <h4 className="py-2">No comments yet</h4>
+        )}
+      </aside>
+    </article>
   );
 }
 export async function getServerSideProps(context: { params: { id: string } }) {

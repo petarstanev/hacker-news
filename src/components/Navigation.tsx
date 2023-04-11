@@ -25,7 +25,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="max-w-3xl mx-auto flex justify-around py-2 border-b">
+    <nav className="max-w-3xl mx-auto flex justify-around py-2 px-4 border-b ">
       {links.map((l) => (
         <Link
           key={l.id}
