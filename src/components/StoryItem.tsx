@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { timeSince, urlFormatter, kFormatter } from "../utils/dataFormatter";
+import { timeSince, urlFormatter } from "../utils/dataFormatter";
 import { FaRegComment } from "react-icons/fa";
 import { FullStory, FullStoryFormatted } from "../store/stories-provider";
 import Link from "next/link";
@@ -15,11 +15,11 @@ const StoryItem = (props: FullStoryFormatted) => {
   useEffect(() => {
     //TODO: check if time gets updated after a minute
     props.text && setFormattedText(parse(props.text));
-  }, []);
+  }, [props.text]);
 
   useEffect(() => {
     setTimeAgo(timeSince(props.time));
-  }, []);
+  }, [props.time]);
 
   return (
     <div className="flex flex-col border-b px-4">

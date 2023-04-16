@@ -1,11 +1,12 @@
 import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
-import { timeSince, urlFormatter, kFormatter } from "../utils/dataFormatter";
+import { timeSince, urlFormatter } from "../utils/dataFormatter";
+import CategoryType  from "@/interfaces/CategoryType";
 
 // TODO: Add list of possible categories
-export const getStoriesIds = async (category: string) => {
+export const getStoriesIds = async (category: CategoryType) => {
   //topstories, newstories, beststories -> 500 stories
   //askstories, showstories, jobstories -> 200 stories
-  console.log('TEST'+ category);
+  console.log("TEST" + category);
   const result = await fetch(
     `https://hacker-news.firebaseio.com/v0/${category}stories.json?print=pretty`
   );
@@ -15,9 +16,8 @@ export const getStoriesIds = async (category: string) => {
 
   const data = await result.json();
   //TODO: Add the value to config
-  return data.slice(0, 50); 
+  return data.slice(0, 50);
 };
-
 
 export const getStories = async (category: string) => {
   //topstories, newstories, beststories
@@ -37,9 +37,9 @@ export const getStories = async (category: string) => {
 
 let cache = new Map();
 
-let formatData = (data: FullStory): FullStoryFormatted=>{
-  let formattedItem: FullStoryFormatted = data; 
-  if(data.url){
+let formatData = (data: FullStory): FullStoryFormatted => {
+  let formattedItem: FullStoryFormatted = data;
+  if (data.url) {
     formattedItem.formattedLink = urlFormatter(data.url);
   }
   // BUG: This is not working at server side call.
@@ -47,8 +47,7 @@ let formatData = (data: FullStory): FullStoryFormatted=>{
   //   formattedItem.formattedText = parse(data.text);
   // }
   return formattedItem;
-} 
-
+};
 
 export const getItem = async (itemId: string) => {
   // TODO: Add caching enable flag to config

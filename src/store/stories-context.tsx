@@ -1,5 +1,6 @@
 import React from "react";
 import { FullStory } from "./stories-provider";
+import CategoryType from "@/interfaces/CategoryType";
 
 interface StoriesContextProps {
   displayStories: FullStory[];
@@ -7,7 +8,7 @@ interface StoriesContextProps {
   category: string;
   isCategoryLoading: boolean;
   setSelectStory: (story: FullStory | undefined) => void;
-  setCategory: (category: string) => void;
+  setCategory: (category: CategoryType) => void;
 }
 
 const StoriesContext = React.createContext<StoriesContextProps>({

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import StoriesContext from "./stories-context";
 import { getItem, getStoriesIds } from "@/utils/api";
+import CategoryType from "@/interfaces/CategoryType";
 
 // TODO : Move interfaces in new place
 export interface FullStory {
@@ -29,7 +30,7 @@ export interface FullStoryFormatted extends FullStory {
 let storiesMap = new Map();
 
 const StoriesProvider = (props: { children: React.ReactNode }) => {
-  const [category, setCategory] = useState("topstories");
+  const [category, setCategory] = useState<CategoryType>("topstories" as CategoryType);
   const [loadedStories, setLoadedStories] = useState<FullStory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStory, setSelectStory] = useState<FullStory>();
@@ -58,7 +59,7 @@ const StoriesProvider = (props: { children: React.ReactNode }) => {
     }); //500 top stories
   }, [category]);
 
-  const setCategoryHandler = (category: string) => {
+  const setCategoryHandler = (category: CategoryType) => {
     setSelectStory(undefined); //set story to null if we change the category
     setCategory(category);
   };

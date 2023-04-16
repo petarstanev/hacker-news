@@ -18,11 +18,11 @@ export default function Item(props: FullStoryFormatted) {
   //TODO: Move this in server rendering or somewhere else
   useEffect(() => {
     props.text && setFormattedText(parse(props.text));
-  }, []);
+  }, [props.text]);
 
   useEffect(() => {
     setTimeAgo(timeSince(props.time));
-  }, []);
+  }, [props.time]);
 
   {
     /* TODO: Test on phone if we need back button or not */

@@ -1,8 +1,3 @@
-export let kFormatter = (num: number): string => {
-  // TODO try to remove
-  return num > 999 ? (num / 1000).toFixed(1) + "k" : num+'';
-};
-
 export let timeSince = (date: number) => {
   let nowUnixDate = Math.floor(new Date().getTime() / 1000);
   let seconds = nowUnixDate - date;

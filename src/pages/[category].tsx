@@ -3,6 +3,7 @@ import { FullStory } from "@/store/stories-provider";
 import StoryItem from "../components/StoryItem";
 import { useEffect, useContext } from "react";
 import ScrollContext from "@/store/scrollContext";
+import CategoryType from "@/interfaces/CategoryType";
 
 export default function Category(props: { stories: FullStory[] }) {
   let context = useContext(ScrollContext);
@@ -22,13 +23,12 @@ export default function Category(props: { stories: FullStory[] }) {
       // console.log("LAST", window.scrollY);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [handleScroll,context.scrollPosition]);
 
   return (
     <>
-      {props.stories && props.stories.map((story) => (
-        <StoryItem key={story.id} {...story} />
-      ))}
+      {props.stories &&
+        props.stories.map((story) => <StoryItem key={story.id} {...story} />)}
     </>
   );
 }
@@ -42,7 +42,7 @@ export async function getStaticPaths() {
       { params: { category: "best" } },
       { params: { category: "ask" } },
       { params: { category: "show" } },
-      { params: { category: "jobs" } },
+      { params: { category: "job" } },
     ],
     fallback: true, // can also be true or 'blocking'
   };
@@ -51,7 +51,8 @@ export async function getStaticPaths() {
 export async function getStaticProps(context: {
   params: { category: string };
 }) {
-  const category = context?.params.category;
+  const category = context?.params.category as CategoryType;
+
   const storiesIds = await getStoriesIds(category);
   let storiesPromises = storiesIds.map((id: string) => {
     return getItem(id);

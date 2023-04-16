@@ -23,7 +23,7 @@ export default function DefaultCategory(props: { stories: FullStory[] }) {
       // console.log("LAST", window.scrollY);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [context.scrollPosition, handleScroll]);
 
   return (
     <>
@@ -34,9 +34,8 @@ export default function DefaultCategory(props: { stories: FullStory[] }) {
   );
 }
 
-
 export async function getStaticProps() {
-  const category = 'best'; //TODO remove hard coded value.
+  const category = "best"; //TODO remove hard coded value.
   const storiesIds = await getStoriesIds(category);
   let storiesPromises = storiesIds.map((id: string) => {
     return getItem(id);
