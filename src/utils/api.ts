@@ -1,12 +1,10 @@
 import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
 import { timeSince, urlFormatter } from "../utils/dataFormatter";
-import CategoryType  from "@/interfaces/CategoryType";
+import CategoryType from "@/interfaces/CategoryType";
 
-// TODO: Add list of possible categories
 export const getStoriesIds = async (category: CategoryType) => {
   //topstories, newstories, beststories -> 500 stories
   //askstories, showstories, jobstories -> 200 stories
-  console.log("TEST" + category);
   const result = await fetch(
     `https://hacker-news.firebaseio.com/v0/${category}stories.json?print=pretty`
   );
@@ -16,7 +14,7 @@ export const getStoriesIds = async (category: CategoryType) => {
 
   const data = await result.json();
   //TODO: Add the value to config
-  return data.slice(0, 50);
+  return data.slice(0, 100);
 };
 
 export const getStories = async (category: string) => {
@@ -31,7 +29,7 @@ export const getStories = async (category: string) => {
 
   const data = await result.json();
 
-  const stories = await Promise.all(data.slice(0, 10).map(getItem));
+  const stories = await Promise.all(data.slice(0, 3).map(getItem));
   return stories;
 };
 
@@ -49,15 +47,7 @@ let formatData = (data: FullStory): FullStoryFormatted => {
   return formattedItem;
 };
 
-export const getItem = async (itemId: string) => {
-  // TODO: Add caching enable flag to config
-  if (cache.has(itemId)) {
-    // console.log("CACHE" + itemId);
-    return cache.get(itemId).value;
-  } else {
-    // console.log("FETCH" + itemId);
-  }
-
+export const getItem = async <T>(itemId: string|number) => {
   const result = await fetch(
     `https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`
   );
@@ -66,9 +56,13 @@ export const getItem = async (itemId: string) => {
     throw Error("Failed to fetch item - " + itemId);
   }
 
-  const data: FullStory = await result.json();
+  const data: T = await result.json();
 
-  const formattedData = formatData(data); //TODO: Move formatting away from getting data
-  cache.set(itemId, { value: formattedData, time: new Date() });
-  return formattedData;
+  //TODO: Move formatting away from getting data
+  // const formattedData = formatData(data); 
+
+  // saveToMongo(formattedData);
+
+  // cache.set(itemId, { value: formattedData, time: new Date() });
+  return data;
 };

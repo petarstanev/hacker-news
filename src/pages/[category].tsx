@@ -1,9 +1,14 @@
 import { getItem, getStoriesIds } from "@/utils/api";
-import { FullStory } from "@/store/stories-provider";
+import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
 import StoryItem from "../components/StoryItem";
 import { useEffect, useContext } from "react";
 import ScrollContext from "@/store/scrollContext";
 import CategoryType from "@/interfaces/CategoryType";
+import {
+  uploadStories,
+  getTodayStories,
+  insertStoryDetail,
+} from "./mongo/mongo";
 
 export default function Category(props: { stories: FullStory[] }) {
   let context = useContext(ScrollContext);
@@ -20,10 +25,9 @@ export default function Category(props: { stories: FullStory[] }) {
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      // console.log("LAST", window.scrollY);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [handleScroll,context.scrollPosition]);
+  }, [handleScroll, context.scrollPosition]);
 
   return (
     <>
@@ -53,15 +57,24 @@ export async function getStaticProps(context: {
 }) {
   const category = context?.params.category as CategoryType;
 
+  //API
   const storiesIds = await getStoriesIds(category);
   let storiesPromises = storiesIds.map((id: string) => {
     return getItem(id);
   });
 
-  let stories = await Promise.all(storiesPromises);
+  let stories = await Promise.all<FullStoryFormatted>(storiesPromises);
+
+  for (let s of stories) {
+    insertStoryDetail(s);
+  }
+
+  //MONGO
+  let todayStories = await getTodayStories();
+
   return {
     // Passed to the page component as props
-    props: { stories },
+    props: { stories: JSON.parse(JSON.stringify(todayStories)) },
     revalidate: 10, // In seconds
   };
 }

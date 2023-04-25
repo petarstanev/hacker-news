@@ -1,64 +1,65 @@
 import { getItem } from "@/utils/api";
-import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
-import { timeSince, urlFormatter } from "../../utils/dataFormatter";
-import Comment from "@/components/Comment";
+import { FullStory, FullStoryFormatted, FullStoryFormattedMongo } from "@/store/stories-provider";
+import Comment, { CommentProp } from "@/components/Comment";
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { insertStoryDetail, getStoryDetails, truncateDB } from "../mongo/mongo";
 
-// import { useRouter } from "next/router";
-
-export default function Item(props: FullStoryFormatted) {
-  // const router = useRouter();
+export default function Item(props: {story: FullStoryFormattedMongo}) {
   let [formattedText, setFormattedText] = useState<
     string | JSX.Element | JSX.Element[]
   >();
   let [timeAgo, setTimeAgo] = useState<string>();
-
-  //TODO: Move this in server rendering or somewhere else
-  useEffect(() => {
-    props.text && setFormattedText(parse(props.text));
-  }, [props.text]);
+  let [story, setStory] = useState<FullStoryFormatted>();
 
   useEffect(() => {
-    setTimeAgo(timeSince(props.time));
-  }, [props.time]);
+    (async () => {
+      // var startTime = performance.now();
+      // let fullStory = await getItem<FullStoryFormatted>("35598917"); //change param.id
+      // // var endTime = performance.now();
+      // // console.log(`Took ${endTime - startTime} milliseconds`);
+      setStory(props.story);
+      //
+    })();
+  }, []);
 
-  {
-    /* TODO: Test on phone if we need back button or not */
+  // useEffect(() => {
+  //   story && story.text && setFormattedText(parse(story.text));
+  // }, [story.text]);
+
+  // useEffect(() => {
+  //   story && setTimeAgo(timeSince(story.time));
+  // }, [story.time]);
+
+  if (!story) {
+    return <p>Error</p>;
   }
-  {
-    /* <button
-        onClick={() => router.back()}
-        className="bg-white border border-black"
-      >
-        Back
-      </button> */
-  }
+
   return (
     <article>
       <div className="px-4">
-        <h2 className="text-xl font-bold">{props.title}</h2>
-        {props.text && <section className="py-2">{formattedText}</section>}
+        <h2 className="text-xl font-bold">{story.title}</h2>
+        {story.text && <section className="py-2">{formattedText}</section>}
 
-        {props.url && (
+        {story.url && (
           <Link
             className="py-2 line-clamp-2 text-sky-600 hover:underline"
-            href={props.url}
+            href={story.url}
             rel="noopener noreferrer"
             target="_blank"
           >
-            {props.url}
+            {story.url}
           </Link>
         )}
 
-        <h3>{`${props.score} points by ${props.by} ${timeAgo} ago`}</h3>
+        <h3>{`${story.score} points by ${story.by} ${timeAgo} ago`}</h3>
       </div>
       <aside>
-        {props.kids ? (
+        {story.kids ? (
           <>
             <h4 className="font-bold pt-2 px-4">Comments:</h4>
-            {props.kids.map((commentId) => (
+            {story.kids.map((commentId) => (
               <Comment key={commentId} id={commentId} level={0} />
             ))}
           </>
@@ -70,8 +71,13 @@ export default function Item(props: FullStoryFormatted) {
   );
 }
 export async function getServerSideProps(context: { params: { id: string } }) {
-  let fullStory = await getItem(context.params.id);
+  let story = await getStoryDetails(parseInt(context.params.id));
+
+  let serialize = JSON.parse(JSON.stringify(story));
+  console.log(serialize);
+  // await truncateDB();
+
   return {
-    props: { ...fullStory }, // will be passed to the page component as props
+    props: { story: serialize }, // will be passed to the page component as props
   };
 }

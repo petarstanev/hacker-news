@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import StoriesContext from "./stories-context";
 import { getItem, getStoriesIds } from "@/utils/api";
 import CategoryType from "@/interfaces/CategoryType";
+import { CommentProp } from "@/components/Comment";
+import { ObjectId } from "mongodb";
 
 // TODO : Move interfaces in new place
 export interface FullStory {
@@ -27,10 +29,18 @@ export interface FullStoryFormatted extends FullStory {
   formattedText?: string | JSX.Element | JSX.Element[]; //parsed HTML
 }
 
+export interface FullStoryFormattedMongo extends FullStoryFormatted {
+  _id?: ObjectId;
+  date: Date;
+  comments: CommentProp[]
+}
+
 let storiesMap = new Map();
 
 const StoriesProvider = (props: { children: React.ReactNode }) => {
-  const [category, setCategory] = useState<CategoryType>("topstories" as CategoryType);
+  const [category, setCategory] = useState<CategoryType>(
+    "topstories" as CategoryType
+  );
   const [loadedStories, setLoadedStories] = useState<FullStory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStory, setSelectStory] = useState<FullStory>();

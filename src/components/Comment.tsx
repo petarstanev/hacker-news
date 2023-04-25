@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGetItem } from "../hooks/useGetItem";
 import { timeSince } from "../utils/dataFormatter";
-interface CommentProp {
+export interface CommentProp {
   id: number;
   kids: number[];
   by: string;
