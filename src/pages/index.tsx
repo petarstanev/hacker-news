@@ -5,25 +5,26 @@ import { useEffect, useContext } from "react";
 import ScrollContext from "@/store/scrollContext";
 
 export default function DefaultCategory(props: { stories: FullStory[] }) {
-  let context = useContext(ScrollContext);
+  return <p>Use category</p>
+  // let context = useContext(ScrollContext);
 
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    if (position) {
-      // console.log("POSITION ", position);
-      context.setScrollPosition(position);
-    }
-  };
+  // const handleScroll = () => {
+  //   const position = window.pageYOffset;
+  //   if (position) {
+  //     // console.log("POSITION ", position);
+  //     context.setScrollPosition(position);
+  //   }
+  // };
 
-  useEffect(() => {
-    window.scrollTo(0, context.scrollPosition);
-    window.addEventListener("scroll", handleScroll, { passive: true });
+  // useEffect(() => {
+  //   window.scrollTo(0, context.scrollPosition);
+  //   window.addEventListener("scroll", handleScroll, { passive: true });
 
-    return () => {
-      // console.log("LAST", window.scrollY);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [context.scrollPosition, handleScroll]);
+  //   return () => {
+  //     // console.log("LAST", window.scrollY);
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [context.scrollPosition, handleScroll]);
 
   return (
     <>

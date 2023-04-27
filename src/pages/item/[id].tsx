@@ -1,12 +1,16 @@
 import { getItem } from "@/utils/api";
-import { FullStory, FullStoryFormatted, FullStoryFormattedMongo } from "@/store/stories-provider";
+import {
+  FullStory,
+  FullStoryFormatted,
+  FullStoryFormattedMongo,
+} from "@/store/stories-provider";
 import Comment, { CommentProp } from "@/components/Comment";
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { insertStoryDetail, getStoryDetails, truncateDB } from "../mongo/mongo";
 
-export default function Item(props: {story: FullStoryFormattedMongo}) {
+export default function Item(props: { story: FullStoryFormattedMongo }) {
   let [formattedText, setFormattedText] = useState<
     string | JSX.Element | JSX.Element[]
   >();
@@ -75,7 +79,6 @@ export async function getServerSideProps(context: { params: { id: string } }) {
 
   let serialize = JSON.parse(JSON.stringify(story));
   console.log(serialize);
-  // await truncateDB();
 
   return {
     props: { story: serialize }, // will be passed to the page component as props

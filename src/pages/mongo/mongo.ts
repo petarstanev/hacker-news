@@ -5,7 +5,7 @@ import {
   FullStoryFormattedMongo,
 } from "@/store/stories-provider";
 import { getItem } from "@/utils/api";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 const MONGODB_URI =
   "mongodb+srv://Critter5679:iStrpApE13nv@cluster0.6z1p5mw.mongodb.net/?retryWrites=true&w=majority";
@@ -56,13 +56,15 @@ export let insertStoryDetail = async (story: FullStoryFormatted) => {
     comments: [],
   };
 
-  let commentsPromises = mongoStory.kids.map((commentId) => {
-    return getItem<CommentProp>(commentId);
-  });
+  if (mongoStory.kids && mongoStory.kids.length) {
+    let commentsPromises = mongoStory.kids.map((commentId) => {
+      return getItem<CommentProp>(commentId);
+    });
 
-  let comments = await Promise.all(commentsPromises);
+    let comments = await Promise.all(commentsPromises);
 
-  mongoStory.comments = comments;
+    mongoStory.comments = comments;
+  }
 
   const insertResult = await collection.updateOne(
     { id: mongoStory.id },
@@ -83,19 +85,38 @@ export let getStoryDetails = async (id: number) => {
   return foundStory;
 };
 
-export let getTodayStories = async () => {
+export let getNextBestStories = async (page: number) => {
   await client.connect(); //TODO check where to move this
   let todaysDate = new Date();
   todaysDate.setHours(0, 0, 0, 0);
 
   const foundStory = await collection
     .find<FullStoryFormattedMongo>({ date: todaysDate })
+    .sort({ score: -1 })
+    .skip(page * 2) //page multiply by limit
+    .limit(2)
     .toArray();
+
+  return foundStory;
+};
+
+export let getTodayBestStories = async () => {
+  await client.connect(); //TODO check where to move this
+  let todaysDate = new Date();
+  todaysDate.setHours(0, 0, 0, 0);
+
+  const foundStory = await collection
+    .find<FullStoryFormattedMongo>({ date: todaysDate })
+    .sort({ score: -1 })
+    .limit(2)
+    .toArray();
+
   return foundStory;
 };
 
 export let truncateDB = async () => {
   await client.connect(); //TODO check where to move this
 
-  await collection.deleteMany({});
+  let result = await collection.deleteMany({});
+  return result.deletedCount;
 };

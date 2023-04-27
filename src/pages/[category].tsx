@@ -1,38 +1,73 @@
 import { getItem, getStoriesIds } from "@/utils/api";
-import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
+import {
+  FullStory,
+  FullStoryFormatted,
+  FullStoryFormattedMongo,
+} from "@/store/stories-provider";
 import StoryItem from "../components/StoryItem";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import ScrollContext from "@/store/scrollContext";
 import CategoryType from "@/interfaces/CategoryType";
-import {
-  uploadStories,
-  getTodayStories,
-  insertStoryDetail,
-} from "./mongo/mongo";
+import { getTodayBestStories, insertStoryDetail } from "./mongo/mongo";
 
-export default function Category(props: { stories: FullStory[] }) {
-  let context = useContext(ScrollContext);
-
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    if (position) {
-      context.setScrollPosition(position);
-    }
-  };
+export default function Category(props: {
+  stories: FullStoryFormattedMongo[];
+}) {
+  let [loadedStories, setLoadedStories] = useState(props.stories);
+  let [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
-    window.scrollTo(0, context.scrollPosition);
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    if (pageNumber === 1) return;
+    (async () => {
+      let result = await fetch("/api/mongodb?page=" + pageNumber);
+      if (result.ok) {
+        let newStories = (await result.json()) as FullStoryFormattedMongo[];
+        console.log(newStories);
+        setLoadedStories((currentStories) => {
+          if (
+            currentStories[currentStories.length - 1].id ===
+            newStories[newStories.length - 1].id
+          ) {
+            return currentStories;
+          }
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll, context.scrollPosition]);
+          return [...currentStories, ...newStories];
+        });
+      }
+    })();
+  }, [pageNumber]);
+
+  // let context = useContext(ScrollContext);
+
+  // const handleScroll = () => {
+  //   const position = window.pageYOffset;
+  //   if (position) {
+  //     context.setScrollPosition(position);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   console.log('SCROLL')
+  //   window.scrollTo(0, context.scrollPosition);
+  //   window.addEventListener("scroll", handleScroll, { passive: true });
+
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [handleScroll, context.scrollPosition]);
 
   return (
     <>
-      {props.stories &&
-        props.stories.map((story) => <StoryItem key={story.id} {...story} />)}
+      {loadedStories.map((story) => (
+        <StoryItem key={story.id} {...story} />
+      ))}
+      <button
+        onClick={() => {
+          setPageNumber((x) => x + 1);
+        }}
+      >
+        Load more
+      </button>
     </>
   );
 }
@@ -55,22 +90,24 @@ export async function getStaticPaths() {
 export async function getStaticProps(context: {
   params: { category: string };
 }) {
-  const category = context?.params.category as CategoryType;
+  // //API
+  // const category = context?.params.category as CategoryType;
 
-  //API
-  const storiesIds = await getStoriesIds(category);
-  let storiesPromises = storiesIds.map((id: string) => {
-    return getItem(id);
-  });
+  // const storiesIds = await getStoriesIds(category);
+  // let storiesPromises = storiesIds.map((id: string) => {
+  //   return getItem<FullStoryFormatted>(id).then((story) =>
+  //     insertStoryDetail(story)
+  //   );
+  // });
 
-  let stories = await Promise.all<FullStoryFormatted>(storiesPromises);
-
-  for (let s of stories) {
-    insertStoryDetail(s);
-  }
+  // Promise.all<FullStoryFormatted>(storiesPromises);
 
   //MONGO
-  let todayStories = await getTodayStories();
+  var startTime = performance.now();
+  let todayStories = await getTodayBestStories();
+  var endTime = performance.now();
+
+  // console.log(`getTodayStories() took ${endTime - startTime} milliseconds`);
 
   return {
     // Passed to the page component as props

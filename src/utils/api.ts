@@ -14,24 +14,24 @@ export const getStoriesIds = async (category: CategoryType) => {
 
   const data = await result.json();
   //TODO: Add the value to config
-  return data.slice(0, 100);
+  return data.slice(0, 50);
 };
 
-export const getStories = async (category: string) => {
-  //topstories, newstories, beststories
-  const result = await fetch(
-    `https://hacker-news.firebaseio.com/v0/${category}.json?print=pretty`
-  );
+// export const getStories = async (category: string) => {
+//   //topstories, newstories, beststories
+//   const result = await fetch(
+//     `https://hacker-news.firebaseio.com/v0/${category}.json?print=pretty`
+//   );
 
-  if (!result.ok) {
-    throw Error("Failed to fetch top stories");
-  }
+//   if (!result.ok) {
+//     throw Error("Failed to fetch top stories");
+//   }
 
-  const data = await result.json();
+//   const data = await result.json();
 
-  const stories = await Promise.all(data.slice(0, 3).map(getItem));
-  return stories;
-};
+//   const stories = await Promise.all(data.slice(0, 3).map(getItem));
+//   return stories;
+// };
 
 let cache = new Map();
 
