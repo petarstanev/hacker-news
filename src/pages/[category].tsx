@@ -8,13 +8,20 @@ import StoryItem from "../components/StoryItem";
 import { useEffect, useContext, useState } from "react";
 import ScrollContext from "@/store/scrollContext";
 import CategoryType from "@/interfaces/CategoryType";
-import { getTodayBestStories, insertStoryDetail } from "./mongo/mongo";
+import { getBestStoriesPerPage, insertStoryDetail } from "./mongo/mongo";
 
 export default function Category(props: {
   stories: FullStoryFormattedMongo[];
 }) {
   let [loadedStories, setLoadedStories] = useState(props.stories);
   let [pageNumber, setPageNumber] = useState(1);
+
+  useEffect(() => {
+    window.addEventListener("scroll", loadMoreStories);
+    return () => {
+      window.removeEventListener("scroll", loadMoreStories);
+    };
+  }, []);
 
   useEffect(() => {
     if (pageNumber === 1) return;
@@ -25,8 +32,9 @@ export default function Category(props: {
         console.log(newStories);
         setLoadedStories((currentStories) => {
           if (
+            newStories.length &&
             currentStories[currentStories.length - 1].id ===
-            newStories[newStories.length - 1].id
+              newStories[newStories.length - 1].id
           ) {
             return currentStories;
           }
@@ -36,6 +44,16 @@ export default function Category(props: {
       }
     })();
   }, [pageNumber]);
+
+  async function loadMoreStories() {
+    if (
+      document.scrollingElement &&
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+        document.scrollingElement.scrollHeight
+    ) {
+      setPageNumber((x) => x + 1);
+    }
+  }
 
   // let context = useContext(ScrollContext);
 
@@ -61,13 +79,6 @@ export default function Category(props: {
       {loadedStories.map((story) => (
         <StoryItem key={story.id} {...story} />
       ))}
-      <button
-        onClick={() => {
-          setPageNumber((x) => x + 1);
-        }}
-      >
-        Load more
-      </button>
     </>
   );
 }
@@ -92,22 +103,16 @@ export async function getStaticProps(context: {
 }) {
   // //API
   // const category = context?.params.category as CategoryType;
-
-  // const storiesIds = await getStoriesIds(category);
+  // const storiesIds = await getStoriesIds("new");
   // let storiesPromises = storiesIds.map((id: string) => {
   //   return getItem<FullStoryFormatted>(id).then((story) =>
   //     insertStoryDetail(story)
   //   );
   // });
-
   // Promise.all<FullStoryFormatted>(storiesPromises);
 
   //MONGO
-  var startTime = performance.now();
-  let todayStories = await getTodayBestStories();
-  var endTime = performance.now();
-
-  // console.log(`getTodayStories() took ${endTime - startTime} milliseconds`);
+  let todayStories = await getBestStoriesPerPage(0);
 
   return {
     // Passed to the page component as props

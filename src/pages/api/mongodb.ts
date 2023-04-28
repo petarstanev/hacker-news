@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import {
   truncateDB,
   insertStoryDetail,
-  getNextBestStories,
+  getBestStoriesPerPage,
 } from "../mongo/mongo";
 import { getItem, getStoriesIds } from "@/utils/api";
 import { FullStoryFormatted } from "@/store/stories-provider";
@@ -15,7 +15,7 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     let page = req.query.page as string;
-    let newStories = await getNextBestStories(parseInt(page));
+    let newStories = await getBestStoriesPerPage(parseInt(page));
     res.status(200).json(newStories);
     //     console.log(newStories);
   } else if (req.method === "POST") {

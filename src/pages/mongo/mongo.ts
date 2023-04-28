@@ -85,30 +85,17 @@ export let getStoryDetails = async (id: number) => {
   return foundStory;
 };
 
-export let getNextBestStories = async (page: number) => {
+export let getBestStoriesPerPage = async (pageNumber: number) => {
+  const pageSize = 10;
   await client.connect(); //TODO check where to move this
   let todaysDate = new Date();
   todaysDate.setHours(0, 0, 0, 0);
 
   const foundStory = await collection
     .find<FullStoryFormattedMongo>({ date: todaysDate })
-    .sort({ score: -1 })
-    .skip(page * 2) //page multiply by limit
-    .limit(2)
-    .toArray();
-
-  return foundStory;
-};
-
-export let getTodayBestStories = async () => {
-  await client.connect(); //TODO check where to move this
-  let todaysDate = new Date();
-  todaysDate.setHours(0, 0, 0, 0);
-
-  const foundStory = await collection
-    .find<FullStoryFormattedMongo>({ date: todaysDate })
-    .sort({ score: -1 })
-    .limit(2)
+    .sort({ score: -1, id: 1 }) //TODO check if I need to create index
+    .skip(pageNumber * pageSize) //page multiply by limit
+    .limit(pageSize)
     .toArray();
 
   return foundStory;

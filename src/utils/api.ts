@@ -14,7 +14,7 @@ export const getStoriesIds = async (category: CategoryType) => {
 
   const data = await result.json();
   //TODO: Add the value to config
-  return data.slice(0, 50);
+  return data.slice(0, 100);
 };
 
 // export const getStories = async (category: string) => {
