@@ -7,8 +7,7 @@ import {
 import { getItem } from "@/utils/api";
 import { MongoClient, ObjectId } from "mongodb";
 
-const MONGODB_URI =
-  "mongodb+srv://Critter5679:iStrpApE13nv@cluster0.6z1p5mw.mongodb.net/?retryWrites=true&w=majority";
+const MONGODB_URI =`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.6z1p5mw.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(MONGODB_URI);
 
@@ -42,12 +41,11 @@ export let uploadStories = async (stories: FullStory[]) => {
   });
 
   let result = await Promise.all(storiesPromises);
-  console.log(result);
   // the following code examples can be pasted here...
   return "done.";
 };
 
-export let insertStoryDetail = async (story: FullStoryFormatted) => {
+export let insertStoryDetail = async (story: FullStoryFormatted): Promise<void> => {
   await client.connect(); //TODO check where to move this
 
   let mongoStory: FullStoryFormattedMongo = {
@@ -75,12 +73,6 @@ export let insertStoryDetail = async (story: FullStoryFormatted) => {
 
 export let getStoryDetails = async (id: number) => {
   await client.connect(); //TODO check where to move this
-
-  // let mongoStory: FullStoryFormattedMongo = {
-  //   ...story,
-  //   date: new Date(story.time * 1000),
-  //   comments: [],
-  // };
   const foundStory = await collection.findOne<FullStoryFormattedMongo>({ id });
   return foundStory;
 };
