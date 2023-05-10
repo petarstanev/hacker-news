@@ -112,6 +112,7 @@ export async function getStaticProps(context: {
   // );
 
   // await Promise.all<FullStoryFormattedMongo>(uploadedStories);
+  
 
   //MONGO
   let todayStories = await getBestStoriesPerPage(0);
