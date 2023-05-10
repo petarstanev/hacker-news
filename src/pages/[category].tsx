@@ -2,7 +2,11 @@ import { getItem, getStoriesIds } from "@/utils/api";
 import StoryItem from "../components/StoryItem";
 import { useEffect, useState } from "react";
 import CategoryType from "@/interfaces/CategoryType";
-import { FullStoryFormattedMongo, getBestStoriesPerPage, insertStoryDetail } from "../lib/mongodb";
+import {
+  FullStoryFormattedMongo,
+  getBestStoriesPerPage,
+  insertStoryDetail,
+} from "../lib/mongodb";
 import { FullStoryFormatted } from "@/store/stories-provider";
 
 export default function Category(props: {
@@ -90,7 +94,6 @@ export async function getStaticPaths() {
     ],
     fallback: false, // can also be true or 'blocking'
     //TODO: If I want to be true I need to create fallback logic if (router.isFallback) {
-
   };
 }
 
@@ -101,21 +104,29 @@ export async function getStaticProps(context: {
   const category = context?.params.category as CategoryType;
   const storiesIds = await getStoriesIds("new");
 
+  let storiesPromises = storiesIds.map<Promise<FullStoryFormatted>>((id) =>
+    getItem<FullStoryFormatted>(id)
+  );
+  let stories = await Promise.all<FullStoryFormatted>(storiesPromises);
 
-  // let storiesPromises = storiesIds.map<Promise<FullStoryFormatted>>((id) =>
-  //   getItem<FullStoryFormatted>(id)
-  // );
-  // let stories = await Promise.all<FullStoryFormatted>(storiesPromises);
+  let uploadedStories = stories.map<Promise<FullStoryFormattedMongo>>((story) =>
+    insertStoryDetail(story)
+  );
 
-  // let uploadedStories = stories.map<Promise<FullStoryFormattedMongo>>((story) =>
-  //   insertStoryDetail(story)
-  // );
-
-  // await Promise.all<FullStoryFormattedMongo>(uploadedStories);
-  
+  await Promise.all<FullStoryFormattedMongo>(uploadedStories);
 
   //MONGO
-  let todayStories = await getBestStoriesPerPage(0);
+  let todayStories: FullStoryFormattedMongo[] = [];
+  try {
+    todayStories = await getBestStoriesPerPage(0);
+  } catch (e) {
+    // var result = e.message; // error under useUnknownInCatchVariables
+    if (typeof e === "string") {
+      console.log(e.toUpperCase());
+    } else if (e instanceof Error) {
+      console.log(e.message);
+    }
+  }
 
   // console.log(JSON.parse(JSON.stringify(todayStories)));
   return {
