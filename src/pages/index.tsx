@@ -35,20 +35,20 @@ export default function DefaultCategory(props: { stories: FullStory[] }) {
   );
 }
 
-export async function getStaticProps() {
-  const category = "best"; //TODO remove hard coded value.
-  const storiesIds = await getStoriesIds(category);
-  let storiesPromises = storiesIds.map((id: string) => {
-    return getItem(id);
-  });
+// export async function getStaticProps() {
+//   const category = "best"; //TODO remove hard coded value.
+//   const storiesIds = await getStoriesIds(category);
+//   let storiesPromises = storiesIds.map((id: string) => {
+//     return getItem(id);
+//   });
 
-  let stories = await Promise.all(storiesPromises);
-  // console.log(
-  //   "FINISH Loading" + new Date().getMinutes() + ":" + new Date().getSeconds()
-  // );
-  return {
-    // Passed to the page component as props
-    props: { stories },
-    revalidate: 10, // In seconds
-  };
-}
+//   let stories = await Promise.all(storiesPromises);
+//   // console.log(
+//   //   "FINISH Loading" + new Date().getMinutes() + ":" + new Date().getSeconds()
+//   // );
+//   return {
+//     // Passed to the page component as props
+//     props: { stories },
+//     revalidate: 10, // In seconds
+//   };
+// }

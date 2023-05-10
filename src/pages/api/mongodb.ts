@@ -4,7 +4,7 @@ import {
   truncateDB,
   insertStoryDetail,
   getBestStoriesPerPage,
-} from "../mongo/mongo";
+} from "../../lib/mongodb";
 import { getItem, getStoriesIds } from "@/utils/api";
 import { FullStoryFormatted } from "@/store/stories-provider";
 
@@ -21,12 +21,12 @@ export default async function handler(
   } else if (req.method === "POST") {
     const storiesIds = await getStoriesIds("top");
     let storiesPromises = storiesIds.map((id: string) => {
-      return getItem<FullStoryFormatted>(id).then((story) =>
-        insertStoryDetail(story)
-      );
+      return getItem<FullStoryFormatted>(id);
     });
 
-    await Promise.all<FullStoryFormatted>(storiesPromises);
+    let stories = await Promise.all<FullStoryFormatted>(storiesPromises);
+    let storiesAndCommentsPromise  = stories.map((s) => insertStoryDetail(s));
+    let storiesAndComments = await Promise.all<FullStoryFormatted>(storiesAndCommentsPromise);
 
     res.status(200).json({
       name: "DB updated. Added/Updated " + storiesIds.length + " stories",

@@ -2,12 +2,17 @@ import { CommentProp } from "@/components/Comment";
 import {
   FullStory,
   FullStoryFormatted,
-  FullStoryFormattedMongo,
 } from "@/store/stories-provider";
 import { getItem } from "@/utils/api";
 import { MongoClient, ObjectId } from "mongodb";
 
-const MONGODB_URI =`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.6z1p5mw.mongodb.net/?retryWrites=true&w=majority`;
+export interface FullStoryFormattedMongo extends FullStoryFormatted {
+  _id?: ObjectId;
+  date: Date;
+  comments: CommentProp[]
+}
+
+const MONGODB_URI = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.6z1p5mw.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(MONGODB_URI);
 
@@ -45,7 +50,9 @@ export let uploadStories = async (stories: FullStory[]) => {
   return "done.";
 };
 
-export let insertStoryDetail = async (story: FullStoryFormatted): Promise<void> => {
+export let insertStoryDetail = async (
+  story: FullStoryFormatted
+): Promise<FullStoryFormattedMongo> => {
   await client.connect(); //TODO check where to move this
 
   let mongoStory: FullStoryFormattedMongo = {
@@ -64,11 +71,13 @@ export let insertStoryDetail = async (story: FullStoryFormatted): Promise<void> 
     mongoStory.comments = comments;
   }
 
-  const insertResult = await collection.updateOne(
+  await collection.updateOne(
     { id: mongoStory.id },
     { $set: mongoStory },
     { upsert: true }
   );
+
+  return mongoStory;
 };
 
 export let getStoryDetails = async (id: number) => {

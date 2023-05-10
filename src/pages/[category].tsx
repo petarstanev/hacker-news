@@ -1,14 +1,9 @@
 import { getItem, getStoriesIds } from "@/utils/api";
-import {
-  FullStory,
-  FullStoryFormatted,
-  FullStoryFormattedMongo,
-} from "@/store/stories-provider";
 import StoryItem from "../components/StoryItem";
-import { useEffect, useContext, useState } from "react";
-import ScrollContext from "@/store/scrollContext";
+import { useEffect, useState } from "react";
 import CategoryType from "@/interfaces/CategoryType";
-import { getBestStoriesPerPage, insertStoryDetail } from "./mongo/mongo";
+import { FullStoryFormattedMongo, getBestStoriesPerPage, insertStoryDetail } from "../lib/mongodb";
+import { FullStoryFormatted } from "@/store/stories-provider";
 
 export default function Category(props: {
   stories: FullStoryFormattedMongo[];
@@ -29,7 +24,6 @@ export default function Category(props: {
       let result = await fetch("/api/mongodb?page=" + pageNumber);
       if (result.ok) {
         let newStories = (await result.json()) as FullStoryFormattedMongo[];
-        console.log(newStories);
         setLoadedStories((currentStories) => {
           if (
             newStories.length &&
@@ -94,26 +88,35 @@ export async function getStaticPaths() {
       { params: { category: "show" } },
       { params: { category: "job" } },
     ],
-    fallback: true, // can also be true or 'blocking'
+    fallback: false, // can also be true or 'blocking'
+    //TODO: If I want to be true I need to create fallback logic if (router.isFallback) {
+
   };
 }
 
 export async function getStaticProps(context: {
   params: { category: string };
 }) {
-  // //API
-  // const category = context?.params.category as CategoryType;
-  // const storiesIds = await getStoriesIds("new");
-  // let storiesPromises = storiesIds.map((id: string) => {
-  //   return getItem<FullStoryFormatted>(id).then((story) =>
-  //     insertStoryDetail(story)
-  //   );
-  // });
-  // Promise.all<FullStoryFormatted>(storiesPromises);
+  //API
+  const category = context?.params.category as CategoryType;
+  const storiesIds = await getStoriesIds("new");
+
+
+  // let storiesPromises = storiesIds.map<Promise<FullStoryFormatted>>((id) =>
+  //   getItem<FullStoryFormatted>(id)
+  // );
+  // let stories = await Promise.all<FullStoryFormatted>(storiesPromises);
+
+  // let uploadedStories = stories.map<Promise<FullStoryFormattedMongo>>((story) =>
+  //   insertStoryDetail(story)
+  // );
+
+  // await Promise.all<FullStoryFormattedMongo>(uploadedStories);
 
   //MONGO
   let todayStories = await getBestStoriesPerPage(0);
 
+  // console.log(JSON.parse(JSON.stringify(todayStories)));
   return {
     // Passed to the page component as props
     props: { stories: JSON.parse(JSON.stringify(todayStories)) },

@@ -2,7 +2,9 @@ import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
 import { timeSince, urlFormatter } from "../utils/dataFormatter";
 import CategoryType from "@/interfaces/CategoryType";
 
-export const getStoriesIds = async (category: CategoryType) => {
+export const getStoriesIds = async (
+  category: CategoryType
+): Promise<string[]> => {
   //topstories, newstories, beststories -> 500 stories
   //askstories, showstories, jobstories -> 200 stories
   const result = await fetch(
@@ -12,7 +14,7 @@ export const getStoriesIds = async (category: CategoryType) => {
     throw Error("Failed to fetch top stories");
   }
 
-  const data = await result.json();
+  const data = (await result.json()) as string[];
   //TODO: Add the value to config
   return data.slice(0, 100);
 };
@@ -47,7 +49,7 @@ let formatData = (data: FullStory): FullStoryFormatted => {
   return formattedItem;
 };
 
-export const getItem = async <T>(itemId: string|number) => {
+export const getItem = async <T>(itemId: string | number) => {
   const result = await fetch(
     `https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`
   );
@@ -59,7 +61,7 @@ export const getItem = async <T>(itemId: string|number) => {
   const data: T = await result.json();
 
   //TODO: Move formatting away from getting data
-  // const formattedData = formatData(data); 
+  // const formattedData = formatData(data);
 
   // saveToMongo(formattedData);
 

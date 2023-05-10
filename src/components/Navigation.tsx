@@ -3,11 +3,11 @@ import Link from "next/link";
 
 const links = [
   { id: 0, name: "Top", url: "top", default: true },
-  { id: 1, name: "Best", url: "best", default: false },
+  // { id: 1, name: "Best", url: "best", default: false },
   { id: 2, name: "New", url: "new", default: false },
-  { id: 3, name: "Ask", url: "ask", default: false },
-  { id: 4, name: "Show", url: "show", default: false },
-  { id: 5, name: "Jobs", url: "job", default: false },
+  // { id: 3, name: "Ask", url: "ask", default: false },
+  // { id: 4, name: "Show", url: "show", default: false },
+  // { id: 5, name: "Jobs", url: "job", default: false },
 ];
 
 const Navigation = () => {

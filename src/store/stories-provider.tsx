@@ -3,7 +3,6 @@ import StoriesContext from "./stories-context";
 import { getItem, getStoriesIds } from "@/utils/api";
 import CategoryType from "@/interfaces/CategoryType";
 import { CommentProp } from "@/components/Comment";
-import { ObjectId } from "mongodb";
 
 // TODO : Move interfaces in new place
 export interface FullStory {
@@ -29,12 +28,6 @@ export interface FullStoryFormatted extends FullStory {
   formattedText?: string | JSX.Element | JSX.Element[]; //parsed HTML
 }
 
-export interface FullStoryFormattedMongo extends FullStoryFormatted {
-  _id?: ObjectId;
-  date: Date;
-  comments: CommentProp[]
-}
-
 let storiesMap = new Map();
 
 const StoriesProvider = (props: { children: React.ReactNode }) => {
@@ -45,29 +38,29 @@ const StoriesProvider = (props: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStory, setSelectStory] = useState<FullStory>();
 
-  useEffect(() => {
-    setIsLoading(true);
-    getStoriesIds(category).then((storiesIds: string[]) => {
-      let itemsPromise = storiesIds.map((id: string) => {
-        if (storiesMap.has(id)) {
-          let cacheStory = storiesMap.get(id);
-          console.log("CACHE ", cacheStory.by, cacheStory.title);
-          return cacheStory;
-        } else {
-          return getItem(id).then((apiStory: FullStory) => {
-            storiesMap.set(apiStory.id, apiStory);
-            console.log("API ", apiStory.by, apiStory.title);
-            return apiStory;
-          });
-        }
-      });
-      Promise.all(itemsPromise).then((loadedStoriesForCategory) => {
-        console.log("--- FINISH LOADING --- " + category);
-        setIsLoading(false);
-        setLoadedStories(loadedStoriesForCategory);
-      });
-    }); //500 top stories
-  }, [category]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getStoriesIds(category).then((storiesIds: string[]) => {
+  //     let itemsPromise = storiesIds.map((id: string) => {
+  //       if (storiesMap.has(id)) {
+  //         let cacheStory = storiesMap.get(id);
+  //         console.log("CACHE ", cacheStory.by, cacheStory.title);
+  //         return cacheStory;
+  //       } else {
+  //         return getItem<FullStory>(id).then((apiStory: FullStory) => {
+  //           storiesMap.set(apiStory.id, apiStory);
+  //           console.log("API ", apiStory.by, apiStory.title);
+  //           return apiStory;
+  //         });
+  //       }
+  //     });
+  //     Promise.all(itemsPromise).then((loadedStoriesForCategory) => {
+  //       console.log("--- FINISH LOADING --- " + category);
+  //       setIsLoading(false);
+  //       setLoadedStories(loadedStoriesForCategory);
+  //     });
+  //   }); //500 top stories
+  // }, [category]);
 
   const setCategoryHandler = (category: CategoryType) => {
     setSelectStory(undefined); //set story to null if we change the category

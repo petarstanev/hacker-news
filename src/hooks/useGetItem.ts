@@ -10,7 +10,7 @@ export const useGetItem = <T>(
 
   useEffect(() => {
     setLoading(true);
-    getItem(itemId+'')//TODO: Remove conversion
+    getItem<T>(itemId+'')//TODO: Remove conversion
       .then((item) => {
         setData(item);
       })
