@@ -1,15 +1,14 @@
 import { CommentProp } from "@/components/Comment";
-import {
-  FullStory,
-  FullStoryFormatted,
-} from "@/store/stories-provider";
+import CategoryType from "@/interfaces/CategoryType";
+import Category from "@/pages/[category]";
+import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
 import { getItem } from "@/utils/api";
 import { MongoClient, ObjectId } from "mongodb";
 
 export interface FullStoryFormattedMongo extends FullStoryFormatted {
   _id?: ObjectId;
   date: Date;
-  comments: CommentProp[]
+  comments: CommentProp[];
 }
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.6z1p5mw.mongodb.net/?retryWrites=true&w=majority`;
@@ -21,9 +20,10 @@ const dbName = "stories";
 const db = client.db(dbName);
 const collection = db.collection("stories");
 
-let getDateNoTime = (time: number) => {
+//TODO move to helper function *1000
+let getTime = (time: number) => {
   let date = new Date(time * 1000);
-  date.setHours(0, 0, 0, 0);
+  // date.setHours(0, 0, 0, 0);
   return date;
 };
 
@@ -34,7 +34,7 @@ export let uploadStories = async (stories: FullStory[]) => {
   let storiesPromises = stories.map(async (story) => {
     let mongoStory: FullStoryFormattedMongo = {
       ...story,
-      date: getDateNoTime(story.time),
+      date: getTime(story.time),
       comments: [],
     };
     // let res = await collection.createIndex( { "id": 1 }, { unique: true } );
@@ -57,7 +57,7 @@ export let insertStoryDetail = async (
 
   let mongoStory: FullStoryFormattedMongo = {
     ...story,
-    date: getDateNoTime(story.time),
+    date: getTime(story.time),
     comments: [],
   };
 
@@ -86,18 +86,53 @@ export let getStoryDetails = async (id: number) => {
   return foundStory;
 };
 
-export let getBestStoriesPerPage = async (pageNumber: number) => {
+export let getStories = async (
+  category: CategoryType,
+  date: Date,
+  pageNumber: number
+) => {
+  if (category === "top") {
+    return getBestStories(date, pageNumber);
+  } else if (category === "new") {
+    console.log("NEW");
+    return getNewStories(pageNumber);
+  }
+  let empty: FullStoryFormattedMongo[] = []; //TODO: Remove this
+  return empty;
+};
+
+let getBestStories = async (date: Date, pageNumber: number) => {
+  date.setHours(0, 0, 0, 0);
+
+  let dateMidnight = new Date(date);
+  dateMidnight.setHours(23, 59, 69);
+
+  console.log(date,dateMidnight,pageNumber);
   const pageSize = 10;
   await client.connect(); //TODO check where to move this
-  let todaysDate = new Date();
-  todaysDate.setHours(0, 0, 0, 0);
 
   const foundStory = await collection
-    .find<FullStoryFormattedMongo>({ date: todaysDate })
+    .find<FullStoryFormattedMongo>({
+      date: { $gt: date, $lt: dateMidnight},
+    })
     .sort({ score: -1, id: 1 }) //TODO check if I need to create index
     .skip(pageNumber * pageSize) //page multiply by limit
     .limit(pageSize)
     .toArray();
+
+  return foundStory;
+};
+
+let getNewStories = async (pageNumber: number) => {
+  const pageSize = 10;
+  await client.connect(); //TODO check where to move this
+
+  const foundStory = (await collection
+    .find()
+    .sort({ time: -1 }) //TODO check if I need to create index
+    .skip(pageNumber * pageSize) //page multiply by limit
+    .limit(pageSize)
+    .toArray()) as FullStoryFormattedMongo[];
 
   return foundStory;
 };

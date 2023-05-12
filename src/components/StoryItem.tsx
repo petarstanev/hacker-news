@@ -10,7 +10,7 @@ const StoryItem = (props: FullStoryFormatted) => {
   let [formattedText, setFormattedText] = useState<
     string | JSX.Element | JSX.Element[]
   >();
-  const [timeAgo, setTimeAgo] = useState("");
+  const [time, setTime] = useState("");
 
   useEffect(() => {
     //TODO: check if time gets updated after a minute
@@ -18,7 +18,7 @@ const StoryItem = (props: FullStoryFormatted) => {
   }, [props.text]);
 
   useEffect(() => {
-    setTimeAgo(timeSince(props.time));
+    setTime(new Date(props.time*1000).toISOString());
   }, [props.time]);
 
   return (
@@ -44,7 +44,10 @@ const StoryItem = (props: FullStoryFormatted) => {
           props.kids ? props.kids.length : "0"
         } comments`}</p>
         <p>
-          {props.by} {timeAgo} ago
+          {props.by} 
+        </p>
+        <p>
+          {time} 
         </p>
       </Link>
     </div>
