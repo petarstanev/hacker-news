@@ -14,7 +14,6 @@ const Layout = ({ children }: PropsWithChildren) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* <Header/> */}
-      <Navigation />
       <main className="max-w-3xl mx-auto">
         <ScrollProvider>{children}</ScrollProvider>
       </main>

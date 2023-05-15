@@ -4,7 +4,8 @@ import {
 import Comment from "@/components/Comment";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getStoryDetails, FullStoryFormattedMongo } from "../../lib/mongodb";
+import { getStoryDetails } from "../../lib/mongodb";
+import { FullStoryFormattedMongo } from "@/interfaces/FullStoryFormattedMongo";
 
 export default function Item(props: { story: FullStoryFormattedMongo }) {
   let [formattedText, setFormattedText] = useState<
