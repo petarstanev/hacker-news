@@ -1,10 +1,9 @@
 import { getItem, getStoriesIds } from "@/utils/api";
 import StoryItem from "../components/StoryItem";
 import { useEffect, useState } from "react";
-import CategoryType from "@/interfaces/CategoryType";
 import {
   FullStoryFormattedMongo,
-  getStories,
+  getBestStories,
   insertStoryDetail,
 } from "../lib/mongodb";
 import { FullStoryFormatted } from "@/store/stories-provider";
@@ -29,11 +28,11 @@ export default function Category(props: {
     //TODO: Add check if we have made this request already
     (async () => {
       let result = await fetch(
-        `/api/mongodb?category=top&date=${selectedDate.toDateString()}&page=${pageNumber}`
+        `/api/mongodb?date=${selectedDate.toDateString()}&page=${pageNumber}`
       );
       console.log(
         "PAGE" +
-          `/api/mongodb?category=top&date=${selectedDate.toDateString()}&page=${pageNumber}`
+          `/api/mongodb?date=${selectedDate.toDateString()}&page=${pageNumber}`
       );
       if (result.ok) {
         let newStories = (await result.json()) as FullStoryFormattedMongo[];
@@ -133,7 +132,7 @@ export async function getStaticProps(context: {
   }
   //MONGO
   let todaysDate = new Date();
-  let todayStories = await getStories("top", todaysDate, 0);
+  let todayStories = await getBestStories(todaysDate, 0);
   return {
     // Passed to the page component as props
     props: { stories: JSON.parse(JSON.stringify(todayStories)) },

@@ -3,11 +3,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import {
   truncateDB,
   insertStoryDetail,
-  getStories,
+  getBestStories,
+
 } from "../../lib/mongodb";
 import { getItem, getStoriesIds } from "@/utils/api";
 import { FullStoryFormatted } from "@/store/stories-provider";
-import CategoryType from "@/interfaces/CategoryType";
 
 //http://localhost:3000/api/mongodb
 export default async function handler(
@@ -15,12 +15,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    let category = req.query.category as CategoryType;
     let dateString = req.query.date as string;
     let date = new Date(dateString);
     let page = req.query.page as string;
 
-    let stories = await getStories(category,date,parseInt(page));
+    let stories = await getBestStories(date,parseInt(page));
     res.status(200).json(stories);
   } else if (req.method === "POST") {
     const storiesIds = await getStoriesIds("top");
