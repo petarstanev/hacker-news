@@ -1,6 +1,4 @@
-import {
-  FullStoryFormatted,
-} from "@/store/stories-provider";
+import { FullStoryFormatted } from "@/interfaces/FullStoryFormatted";
 import Comment from "@/components/Comment";
 import { useEffect, useState } from "react";
 import Link from "next/link";

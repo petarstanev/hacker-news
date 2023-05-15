@@ -1,14 +1,13 @@
-import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
+import { FullStoryFormatted } from "@/interfaces/FullStoryFormatted";
+import { FullStory } from "@/interfaces/FullStory";
 import { timeSince, urlFormatter } from "../utils/dataFormatter";
-import CategoryType from "@/interfaces/CategoryType";
 
-export const getStoriesIds = async (
-  category: CategoryType
+export const getTopStoriesIds = async (
 ): Promise<string[]> => {
   //topstories, newstories, beststories -> 500 stories
   //askstories, showstories, jobstories -> 200 stories
   const result = await fetch(
-    `https://hacker-news.firebaseio.com/v0/${category}stories.json?print=pretty`
+    `https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`
   );
   if (!result.ok) {
     throw Error("Failed to fetch top stories");
@@ -18,22 +17,6 @@ export const getStoriesIds = async (
   //TODO: Add the value to config
   return data.slice(0, 100);
 };
-
-// export const getStories = async (category: string) => {
-//   //topstories, newstories, beststories
-//   const result = await fetch(
-//     `https://hacker-news.firebaseio.com/v0/${category}.json?print=pretty`
-//   );
-
-//   if (!result.ok) {
-//     throw Error("Failed to fetch top stories");
-//   }
-
-//   const data = await result.json();
-
-//   const stories = await Promise.all(data.slice(0, 3).map(getItem));
-//   return stories;
-// };
 
 let cache = new Map();
 

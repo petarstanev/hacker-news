@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { timeSince, urlFormatter } from "../utils/dataFormatter";
 import { FaRegComment } from "react-icons/fa";
-import { FullStory, FullStoryFormatted } from "../store/stories-provider";
+import { FullStoryFormatted } from "@/interfaces/FullStoryFormatted";
 import Link from "next/link";
 import parse from "html-react-parser";
 

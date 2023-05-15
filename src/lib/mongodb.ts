@@ -1,8 +1,9 @@
 import { CommentProp } from "@/components/Comment";
-import { FullStory, FullStoryFormatted } from "@/store/stories-provider";
+import { FullStoryFormatted } from "@/interfaces/FullStoryFormatted";
+import { FullStory } from "@/interfaces/FullStory";
 import { getItem } from "@/utils/api";
 import clientPromise from "./mongodbClient";
-import { FullStoryFormattedMongo } from "../interfaces/FullStoryFormattedMongo";
+import { FullStoryFormattedMongo } from "@/interfaces/FullStoryFormattedMongo";
 
 //TODO move to helper function *1000
 let getTime = (time: number) => {

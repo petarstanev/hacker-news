@@ -5,8 +5,8 @@ import {
   insertStoryDetail,
   getBestStories,
 } from "../../lib/mongodb";
-import { getItem, getStoriesIds } from "@/utils/api";
-import { FullStoryFormatted } from "@/store/stories-provider";
+import { getItem, getTopStoriesIds } from "@/utils/api";
+import { FullStoryFormatted } from "@/interfaces/FullStoryFormatted";
 
 //http://localhost:3000/api/stories
 export default async function handler(
@@ -21,7 +21,7 @@ export default async function handler(
     let stories = await getBestStories(date, parseInt(page));
     res.status(200).json(stories);
   } else if (req.method === "POST") {
-    const storiesIds = await getStoriesIds("top");
+    const storiesIds = await getTopStoriesIds();
     let storiesPromises = storiesIds.map((id: string) => {
       return getItem<FullStoryFormatted>(id);
     });

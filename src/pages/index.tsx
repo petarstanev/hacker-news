@@ -1,4 +1,4 @@
-import { getItem, getStoriesIds } from "@/utils/api";
+import { getItem, getTopStoriesIds } from "@/utils/api";
 import StoryItem from "../components/StoryItem";
 import { useEffect, useState } from "react";
 import {
@@ -6,7 +6,7 @@ import {
   insertStoryDetail,
 } from "../lib/mongodb";
 import { FullStoryFormattedMongo } from "@/interfaces/FullStoryFormattedMongo";
-import { FullStoryFormatted } from "@/store/stories-provider";
+import { FullStoryFormatted } from "@/interfaces/FullStoryFormatted";
 import DateSelector from "@/components/DateSelector";
 
 export default function Stories(props: {
@@ -97,7 +97,7 @@ export async function getStaticProps() {
   if (process.env.API_CALL_ENABLED == "true") {
     console.log("API enabled");
     //API
-    const storiesIds = await getStoriesIds("top");
+    const storiesIds = await getTopStoriesIds();
     let storiesPromises = storiesIds.map<Promise<FullStoryFormatted>>((id) =>
       getItem<FullStoryFormatted>(id)
     );
