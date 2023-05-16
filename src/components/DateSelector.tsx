@@ -15,10 +15,10 @@ const DateSelector = (props: DateSelectorProps) => {
   };
 
   return (
-    <div className="flex justify-around">
-      <button onClick={() => changeDate(-1)}>Back</button>
-      <p>{date.toDateString()}</p>
-        <button className="disabled:opacity-25" disabled={date.toDateString() === new Date().toDateString()} onClick={() => changeDate(1)}>Next</button>
+    <div className="flex justify-around items-center border-y">
+      <button className="p-1 my-2 border-black border rounded"  onClick={() => changeDate(-1)}>Back</button>
+      <p className="font-bold">{date.toDateString()}</p>
+        <button className="p-1 my-2 border-black border rounded disabled:opacity-25" disabled={date.toDateString() === new Date().toDateString()} onClick={() => changeDate(1)}>Next</button>
     </div>
   );
 };

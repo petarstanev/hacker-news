@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-// import Header from "./Header";
+import Header from "./Header";
 import Head from "next/head";
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -11,8 +11,10 @@ const Layout = ({ children }: PropsWithChildren) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <Header/> */}
-      <main className="max-w-3xl mx-auto">{children}</main>
+      <div className="max-w-3xl mx-auto">
+        <Header />
+        <main>{children}</main>
+      </div>
     </>
   );
 };
